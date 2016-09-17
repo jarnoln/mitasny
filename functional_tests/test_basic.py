@@ -7,4 +7,4 @@ class MitasnyBasicTest(FunctionalTest):
         self.browser.get(self.server_url)
         self.browser.set_window_size(1024, 1024)
         time.sleep(1)
-        self.assertIn('Django', self.browser.title)
+        self.assertIn('Tasks', self.browser.title)
