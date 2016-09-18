@@ -4,5 +4,10 @@
   </head>
   <body>
     <h1> Projects </h1>
+    <table>
+{% for project in project_list %}
+        <tr> <td> <a href="{{ project.get_absoluite_url }}"> {{ project.title }} </a> </td></tr>
+{% endfor %}
+    </table>
   </body>
 </html>
