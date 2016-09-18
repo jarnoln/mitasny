@@ -7,8 +7,5 @@
         <tr> <td> <a href="{{ task.project.get_absolute_url }}"> {{ project.title }} </a> </td></tr>
         <tr> <td> <a href="{{ task.get_absolute_url }}"> {{ task.title }} </a> </td></tr>
 {% endfor %}
-{% if user.is_authenticated %}
-        <tr> <td> <a href="{% url 'tasks:project_create' %}"> [Create project] </a> </td></tr>
-{% endif %}
     </table>
 {% endblock %}
