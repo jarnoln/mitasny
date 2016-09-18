@@ -32,7 +32,7 @@ class ProjectDetail(DetailView):
 class ProjectCreate(CreateView):
     model = Project
     slug_field = 'name'
-    fields = ['name', 'title', 'description', 'created_by']
+    fields = ['name', 'title', 'description']
 
     def get_context_data(self, **kwargs):
         context = super(ProjectCreate, self).get_context_data(**kwargs)

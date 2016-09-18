@@ -19,7 +19,9 @@ class UserTest(TestCase):
         user.set_password('pw')
         user.save()
         response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
-        self.assertTemplateUsed(response, 'tasks/projects.html')
+        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertEqual(response.context['user'], user)
+        self.assertTemplateUsed(response, 'tasks/project_list.html')
 
 
 class TaskListTest(TestCase):

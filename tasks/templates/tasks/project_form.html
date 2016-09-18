@@ -6,7 +6,7 @@
     {% if project %}
 <h1> {{ project.title }} </h1>
     {% else %}
-<h1> {% trans "Create new blog" %} </h1>
+<h1> {% trans "Create new project" %} </h1>
     {% endif %}
 <form action="{% url 'tasks:project_create' %}" method="post">
     {% csrf_token %}
