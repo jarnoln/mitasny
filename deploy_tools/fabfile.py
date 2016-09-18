@@ -24,6 +24,8 @@ def deploy():
     _init_virtualenv(site_folder)
     _get_latest_source(source_folder)
     _update_python_libraries(source_folder, pip)
+    _check_secret_key(source_folder, python)
+    _update_database(source_folder, python)
     _run_remote_unit_tests(app_list, source_folder, python)
     _restart_apache()
 
@@ -31,6 +33,8 @@ def deploy():
 def _init_virtualenv(site_folder):
     if not exists(site_folder + '/virtualenv'):
         run('cd %s && virtualenv virtualenv' % site_folder)
+    if not exists(site_folder + '/db'):
+        run('cd %s && mkdir db' % site_folder)
 
 
 def _run_local_unit_tests(app_list):
@@ -55,6 +59,17 @@ def _get_latest_source(source_folder):
 
 def _update_python_libraries(source_folder, pip):
     run('cd %s && %s install -r requirements.txt' % (source_folder, pip))
+
+
+def _check_secret_key(source_folder, python):
+    settings_folder = source_folder + '/mitasny'
+    if not exists(settings_folder + '/secret_key.py'):
+        run('cd %s && %s generate_secret.py > secret_key.py' % (settings_folder, python))
+
+
+def _update_database(source_folder, python):
+    run('cd %s && %s manage.py makemigrations' % (source_folder, python))
+    run('cd %s && %s manage.py migrate' % (source_folder, python))
 
 
 def _run_remote_unit_tests(app_list, source_folder, python):
