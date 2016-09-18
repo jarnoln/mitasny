@@ -4,7 +4,7 @@ from .task import TaskList
 
 
 urlpatterns = [
-    url(r'^$', TaskList.as_view(), name='home'),
+    url(r'^$', ProjectList.as_view(), name='home'),
     url(r'^project/create/$', ProjectCreate.as_view(), name='project_create'),
     url(r'^project/(?P<slug>[\w\.]+)/delete/$', ProjectDelete.as_view(), name='project_delete'),
     url(r'^project/(?P<slug>[\w\.]+)/$', ProjectDetail.as_view(), name='project'),

@@ -7,6 +7,7 @@
 <table> <tr> <td width="50%"> &nbsp; </td>
 <td>
   <form method="post" action="{% url 'login' %}">
+      <input type="hidden" name="next" value="{% url 'tasks:projects' %}" />
   {% csrf_token %}
   <table class="table">
   <tr> <th class="nowrap"> {{ form.username.label_tag }} </th>

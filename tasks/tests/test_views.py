@@ -10,13 +10,16 @@ class HomePageTest(TestCase):
     def test_default_content(self):
         response = self.client.get(reverse('tasks:home'))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Tasks')
+        self.assertContains(response, 'Projects')
 
 
 class UserTest(TestCase):
     def test_login(self):
-        creator = auth.models.User.objects.create(username='creator', email='creator@iki.fi', password='password')
-        response = self.client.post(reverse('login'), { 'username': creator.username, 'password': 'password'})
+        user = auth.models.User.objects.create(username='creator', email='creator@iki.fi')
+        user.set_password('pw')
+        user.save()
+        response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
+        self.assertTemplateUsed(response, 'tasks/projects.html')
 
 
 class TaskListTest(TestCase):
