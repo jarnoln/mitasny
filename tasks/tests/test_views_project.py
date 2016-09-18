@@ -10,6 +10,7 @@ class ProjectListTest(TestCase):
 
     def test_uses_correct_template(self):
         response = self.client.get(reverse('tasks:projects'))
+        self.assertTemplateUsed(response, 'tasks/tasks_base.html')
         self.assertTemplateUsed(response, 'tasks/project_list.html')
 
     def test_default_context(self):
