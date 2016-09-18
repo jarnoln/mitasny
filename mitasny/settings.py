@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 import os
 from unipath import Path
 
+# If secret_key.py does not exist, create it like this:
+# python generate_secret.py > secret_key.py
+from .secret_key import SECRET_KEY
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 # BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SETTINGS_ROOT = Path(__file__).parent
@@ -21,9 +25,6 @@ SOURCE_ROOT = PROJECT_ROOT.parent
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'e%e%+6yc+_s0)cpbt$nnm#_7ue-z$$rwr33y=_*(-w+!!^b05d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
