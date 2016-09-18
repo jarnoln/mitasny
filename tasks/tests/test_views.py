@@ -22,17 +22,3 @@ class UserTest(TestCase):
         self.assertTrue(response.context['user'].is_authenticated())
         self.assertEqual(response.context['user'], user)
         self.assertTemplateUsed(response, 'tasks/project_list.html')
-
-
-class TaskListTest(TestCase):
-    def test_reverse(self):
-        self.assertEqual(reverse('tasks:tasks'), '/tasks/')
-
-    def test_default_content(self):
-        response = self.client.get(reverse('tasks:tasks'))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, 'Tasks')
-
-    def test_uses_correct_template(self):
-        response = self.client.get(reverse('tasks:tasks'))
-        self.assertTemplateUsed(response, 'tasks/tasks.html')
