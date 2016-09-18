@@ -48,6 +48,6 @@ class TaskCreate(CreateView):
 
     def get_context_data(self, **kwargs):
         context = super(TaskCreate, self).get_context_data(**kwargs)
+        context['project'] = self.project
         context['message'] = self.request.GET.get('message', '')
         return context
-\

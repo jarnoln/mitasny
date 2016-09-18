@@ -4,7 +4,7 @@
     <h1> Task </h1>
     <table>
         <tr>
-            <th> Project </th> <td> {{ task.project.title }} </td>
+            <th> Project </th> <td> <a href="{{ task.project.get_absolute_url }}"> {{ task.project.title }} </a> </td>
         </tr>
         <tr>
             <th> Title </th> <td> {{ task.title }} </td>

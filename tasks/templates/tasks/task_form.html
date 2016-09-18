@@ -6,6 +6,7 @@
     {% if task %}
 <h1> {{ task.title }} </h1>
     {% elif project %}
+<h1> {{ project.title }} </h1>
 <h1> {% trans "Create new task" %} </h1>
 <form action="{% url 'tasks:task_create' project.name %}" method="post">
     {% endif %}

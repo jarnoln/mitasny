@@ -79,7 +79,9 @@ class CreateTaskTest(ExtTestCase):
         creator = self.create_and_log_in_user()
         project = Project.objects.create(created_by=creator, name="test_project", title="Test project")
         response = self.client.get(reverse('tasks:task_create', args=[project.name]))
+        self.assertEqual(response.context['project'], project)
         self.assertEqual(response.context['message'], '')
+
 
     def test_can_create_new_task(self):
         self.assertEqual(Task.objects.all().count(), 0)

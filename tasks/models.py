@@ -46,7 +46,7 @@ class TaskStatus(models.Model):
 
 
 class Task(models.Model):
-    project = models.ForeignKey(Project, null=False)
+    project = models.ForeignKey(Project, null=False, related_name='tasks')
     name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
                             help_text=ugettext_lazy('Must be unique. Used in URL.'))
     title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
