@@ -3,6 +3,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from tasks.models import Project
+from .ext_test_case import ExtTestCase
 
 
 class ProjectListTest(TestCase):
@@ -57,14 +58,7 @@ class ProjectPageTest(TestCase):
         self.assertTemplateUsed(response, '404.html')
 
 
-class CreateProjectTest(TestCase):
-    def create_and_log_in_user(self):
-        user = User.objects.create(username='test_user', email='tuser@iki.fi')
-        user.set_password('pw')
-        user.save()
-        self.client.post(reverse('login'), {'username': user.username, 'password': 'pw'})
-        return user
-
+class CreateProjectTest(ExtTestCase):
     def test_reverse_project_create(self):
         self.assertEqual(reverse('tasks:project_create'), '/project/create/')
 
@@ -90,7 +84,7 @@ class CreateProjectTest(TestCase):
         self.assertEqual(response.context['project'].title, 'Test project')
         self.assertEqual(response.context['project'].description, 'For testing')
 
-    def test_cant_create_blog_if_not_logged_in(self):
+    def test_cant_create_project_if_not_logged_in(self):
         response = self.client.get(reverse('tasks:project_create'), follow=True)
         self.assertTemplateUsed(response, '404.html')
         response = self.client.post(
@@ -103,7 +97,7 @@ class CreateProjectTest(TestCase):
         self.assertEqual(Project.objects.all().count(), 0)
         self.assertTemplateUsed(response, '404.html')
 
-    def test_cant_create_blog_with_existing_name(self):
+    def test_cant_create_project_with_existing_name(self):
         creator = self.create_and_log_in_user()
         Project.objects.create(created_by=creator, name="test_project", title="Test project")
         self.assertEqual(Project.objects.all().count(), 1)
@@ -120,26 +114,32 @@ class CreateProjectTest(TestCase):
         self.assertContains(response, 'Project with this Name already exists')
 
 
-class DeleteProjectPageTest(TestCase):
+class DeleteProjectPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
         self.assertEqual(reverse('tasks:project_delete', args=['test_project']), '/project/test_project/delete/')
 
     def test_uses_correct_template(self):
-        # user = self.register_named_user()
-        creator = User.objects.create(username='creator')
+        creator = self.create_and_log_in_user()
         project = Project.objects.create(created_by=creator, name="test_project")
         response = self.client.get(reverse('tasks:project_delete', args=[project.name]))
         self.assertTemplateUsed(response, 'tasks/project_confirm_delete.html')
 
     def test_can_delete_project(self):
-        # user = self.register_named_user()
-        creator = User.objects.create(username='creator')
+        creator = self.create_and_log_in_user()
         Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
         self.assertEqual(Project.objects.all().count(), 1)
         response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
         self.assertEqual(Project.objects.all().count(), 0)
 
     def test_404_no_project(self):
-        # user = self.register_named_user()
+        creator = self.create_and_log_in_user()
         response = self.client.get(reverse('tasks:project_delete', args=['test_project']))
+        self.assertTemplateUsed(response, '404.html')
+
+    def test_cant_delete_project_if_not_logged_in(self):
+        creator = User.objects.create(username='creator')
+        Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        self.assertEqual(Project.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
         self.assertTemplateUsed(response, '404.html')
