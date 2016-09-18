@@ -1,0 +1,22 @@
+{% extends "tasks/tasks_base.html" %}
+{% load i18n %}
+{% block title %} Mitasny {% endblock %}
+
+{% block content %}
+    {% if project %}
+<h1> {{ project.title }} </h1>
+    {% else %}
+<h1> {% trans "Create new blog" %} </h1>
+    {% endif %}
+<form action="{% url 'tasks:project_create' %}" method="post">
+    {% csrf_token %}
+
+<table class="table">
+{{ form.as_table }}
+    {% trans "Save" as save_txt %}
+    <tr> <td colspan="2"> <input type="submit" class="btn btn-primary" value="{{ save_txt }}"> </td> </tr>
+</table>
+
+</form>
+
+{% endblock %}
