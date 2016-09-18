@@ -1,0 +1,25 @@
+{% extends "tasks/tasks_base.html" %}
+{% load i18n %}
+{% block title %} {% trans 'Confirm delete' %} {% endblock %}
+
+{% block content %}
+<h1> {% trans 'Are you sure you want to delete project' %}: {{ project.title }}? </h1>
+
+<table class="table">
+    <tr>
+        <td>
+    <form action="{% url 'tasks:project_delete' project.name %}" method="post">
+        {% csrf_token %}
+        <input type="submit" class="btn btn-danger" value="{% trans 'Delete' %}" />
+    </form>
+    </td>
+        <td>
+    <form action="{% url 'tasks:project' project.name %}" method="get">
+    {% csrf_token %}
+        <input type="submit" class="btn btn-primary" value="{% trans 'Cancel' %}" />
+    </form>
+        </td>
+    </tr>
+</table>
+
+{% endblock %}

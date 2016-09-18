@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from tasks.models import Project
 
 
@@ -74,9 +75,10 @@ class CreateProjectTest(TestCase):
     def test_can_create_new_blog(self):
         self.assertEqual(Project.objects.all().count(), 0)
         # user = self.register_named_user()
-        creator = User.objects.create(username='creator')
+        creator = User.objects.create(username='creator', email='creator@iki.fi', password='password')
+        user = authenticate(username='creator', password='password')
         response = self.client.post(reverse('tasks:project_create'), {
-            'created_by': creator,
+            'created_by': user,
             'name': 'test_project',
             'title': 'Test project',
             'description': 'For testing'},
@@ -101,3 +103,28 @@ class CreateProjectTest(TestCase):
         self.assertEqual(Project.objects.all().count(), 1)
         self.assertTemplateUsed(response, 'tasks/project_form.html')
         self.assertContains(response, 'Project with this Name already exists')
+
+
+class DeleteProjectPageTest(TestCase):
+    def test_reverse_blog_delete(self):
+        self.assertEqual(reverse('tasks:project_delete', args=['test_project']), '/project/test_project/delete/')
+
+    def test_uses_correct_template(self):
+        # user = self.register_named_user()
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(created_by=creator, name="test_project")
+        response = self.client.get(reverse('tasks:project_delete', args=[project.name]))
+        self.assertTemplateUsed(response, 'tasks/project_confirm_delete.html')
+
+    def test_can_delete_project(self):
+        # user = self.register_named_user()
+        creator = User.objects.create(username='creator')
+        Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        self.assertEqual(Project.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 0)
+
+    def test_404_no_project(self):
+        # user = self.register_named_user()
+        response = self.client.get(reverse('tasks:project_delete', args=['test_project']))
+        self.assertTemplateUsed(response, '404.html')
