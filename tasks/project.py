@@ -22,7 +22,7 @@ class ProjectDetail(DetailView):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         #context['article_list'] = Article.objects.filter(blog=self.object)
         context['message'] = self.request.GET.get('message', '')
-        # context['can_edit'] = self.object.can_edit(self.request.user)
+        context['can_edit'] = self.object.can_edit(self.request.user)
         # context['articles'] = self.object.articles()
         return context
 

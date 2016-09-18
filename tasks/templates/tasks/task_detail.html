@@ -1,0 +1,22 @@
+{% extends "tasks/tasks_base.html" %}
+{% block title %} Mitasny {% endblock %}
+{% block content %}
+    <h1> Task </h1>
+    <table>
+        <tr>
+            <th> Project </th> <td> {{ task.project.title }} </td>
+        </tr>
+        <tr>
+            <th> Title </th> <td> {{ task.title }} </td>
+        </tr>
+        <tr>
+            <th> Name </th><td> {{ task.name }} </td>
+        </tr>
+        <tr>
+            <th> Description </th><td> {{ task.description }} </td>
+        </tr>
+        <tr>
+            <td> <a href="{% url 'tasks:project_delete' task.project.name %}">[Delete project]</a> </td><td> &nbsp; </td>
+        </tr>
+    </table>
+{% endblock %}

@@ -43,3 +43,8 @@ class TaskModelTest(TestCase):
         self.assertEqual(Task.objects.all().count(), 1)
         self.assertEqual(Task.objects.all()[0], task)
 
+    def test_absolute_url(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        task = Task.objects.create(project=project, name='test_task', title='Test task', created_by=creator)
+        self.assertEqual(task.get_absolute_url(), '/project/test_project/task/test_task/')
