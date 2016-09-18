@@ -69,19 +69,18 @@ class CreateProjectTest(TestCase):
         self.assertEqual(reverse('tasks:project_create'), '/project/create/')
 
     def test_uses_correct_template(self):
-        # user = self.register_named_user()
+        self.create_and_log_in_user()
         response = self.client.get(reverse('tasks:project_create'))
         self.assertTemplateUsed(response, 'tasks/project_form.html')
 
     def test_default_context(self):
-        # user = self.register_named_user()
+        self.create_and_log_in_user()
         response = self.client.get(reverse('tasks:project_create'))
-        # self.assertEqual(response.context['title'], 'Create new blog')
-        # self.assertEqual(response.context['message'], '')
+        self.assertEqual(response.context['message'], '')
 
-    def test_can_create_new_projecct(self):
+    def test_can_create_new_project(self):
         self.assertEqual(Project.objects.all().count(), 0)
-        user = self.create_and_log_in_user()
+        self.create_and_log_in_user()
         response = self.client.post(reverse('tasks:project_create'), {
             'name': 'test_project',
             'title': 'Test project',
@@ -91,8 +90,21 @@ class CreateProjectTest(TestCase):
         self.assertEqual(response.context['project'].title, 'Test project')
         self.assertEqual(response.context['project'].description, 'For testing')
 
+    def test_cant_create_blog_if_not_logged_in(self):
+        response = self.client.get(reverse('tasks:project_create'), follow=True)
+        self.assertTemplateUsed(response, '404.html')
+        response = self.client.post(
+            reverse('tasks:project_create'),
+                {
+                    'name': 'test_project',
+                    'title': 'Test project',
+                    'description': 'For testing'
+                }, follow=True)
+        self.assertEqual(Project.objects.all().count(), 0)
+        self.assertTemplateUsed(response, '404.html')
+
     def test_cant_create_blog_with_existing_name(self):
-        creator = User.objects.create(username='creator')
+        creator = self.create_and_log_in_user()
         Project.objects.create(created_by=creator, name="test_project", title="Test project")
         self.assertEqual(Project.objects.all().count(), 1)
         response = self.client.post(
