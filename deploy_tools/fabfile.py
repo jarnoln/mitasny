@@ -1,11 +1,11 @@
 # Usage:
 # Localhost:
-# fab -f deploy_tools/fabfile.py provision:host=jln@localhost
-# fab -f deploy_tools/fabfile.py deploy:host=jln@localhost
+# fab -f deploy_tools/fabfile.py provision:host=username@localhost
+# fab -f deploy_tools/fabfile.py deploy:host=username@localhost
 
 import time
 from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run, settings, abort
+from fabric.api import env, local, run, settings, abort, sudo
 
 
 REPO_URL = 'https://github.com/jarnoln/mitasny.git'
@@ -25,6 +25,7 @@ def deploy():
     _get_latest_source(source_folder)
     _update_python_libraries(source_folder, pip)
     _run_remote_unit_tests(app_list, source_folder, python)
+    _restart_apache()
 
 
 def _init_virtualenv(site_folder):
@@ -60,3 +61,7 @@ def _run_remote_unit_tests(app_list, source_folder, python):
     print('*** Run remote unit tests')
     for app in app_list:
         run('cd %s && %s manage.py test %s --settings=mitasny.settings' % (source_folder, python, app))
+
+
+def _restart_apache():
+    sudo('service apache2 restart')
