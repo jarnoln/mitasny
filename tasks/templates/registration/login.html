@@ -1,0 +1,25 @@
+{% extends 'tasks/tasks_base.html' %}
+{% load i18n %}
+
+{% block title %} {% trans "Login" %} {% endblock %}
+
+{% block content %}
+<table> <tr> <td width="50%"> &nbsp; </td>
+<td>
+  <form method="post" action="{% url 'login' %}">
+  {% csrf_token %}
+  <table class="table">
+  <tr> <th class="nowrap"> {{ form.username.label_tag }} </th>
+       <td> {{ form.username }} </td> </tr>
+  <tr> <th class="nowrap"> {{ form.password.label_tag }} </th>
+       <td> {{ form.password }} </td> </tr>
+  <tr> <td colspan="2"> <input type="submit" id="id_button_login" class="btn btn-primary" value="{% trans 'Login' %}" /> </td> </tr>
+  </table>
+  </form>
+
+{% if form.errors %}
+<p> Invalid username or password. Note that both fields are case-sensitive, check your CAPS LOCK. </p>
+{% endif %}
+</td>
+<td width="50%"> &nbsp; </td> </tr> </table>
+{% endblock %}

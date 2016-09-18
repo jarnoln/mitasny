@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.contrib import auth
 
 
 class HomePageTest(TestCase):
@@ -10,6 +11,12 @@ class HomePageTest(TestCase):
         response = self.client.get(reverse('tasks:home'))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'Tasks')
+
+
+class UserTest(TestCase):
+    def test_login(self):
+        creator = auth.models.User.objects.create(username='creator', email='creator@iki.fi', password='password')
+        response = self.client.post(reverse('login'), { 'username': creator.username, 'password': 'password'})
 
 
 class TaskListTest(TestCase):
