@@ -1,8 +1,9 @@
+import datetime
 from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
-
+from calculate_finish_date import calculate_finish_date
 
 class Project(models.Model):
     name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
@@ -21,6 +22,13 @@ class Project(models.Model):
 
         sum_dict = self.tasks.aggregate(models.Sum('work_left'))
         return sum_dict['work_left__sum']
+
+    @property
+    def finish_date(self):
+        days_left = self.total_work_left
+        start_date = datetime.date.today()
+        return calculate_finish_date(start_date, days_left)
+
 
     def can_edit(self, user):
         if user == self.created_by:

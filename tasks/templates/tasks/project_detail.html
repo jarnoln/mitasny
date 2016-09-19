@@ -35,6 +35,11 @@
             <th class="text-right"> {{ project.total_work_left }} </th>
             <td> &nbsp;</td>
         </tr>
+        <tr>
+            <th colspan="3"> Estimated finish date </th>
+            <th class="text-right"> {{ project.finish_date|date:"Y-m-d" }} </th>
+            <td> &nbsp;</td>
+        </tr>
     {% if user.is_authenticated %}
         <tr> <td> <a class="btn btn-default" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td></tr>
     {% endif %}

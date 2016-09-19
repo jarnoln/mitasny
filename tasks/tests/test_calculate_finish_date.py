@@ -32,3 +32,10 @@ class CalculateFinishDateTest(TestCase):
         finish_date = calculate_finish_date(start_date, 1)
         self.assertEqual(finish_date, datetime.date(2016, 10, 3))
         self.assertEqual(finish_date.weekday(), 0) # Monday
+
+    def test_if_start_time_is_weekend_start_on_next_monday(self):
+        start_date = datetime.date(2016, 9, 24)  # Last day of month (Friday)
+        self.assertEqual(start_date.weekday(), 5)  # Saturday
+        finish_date = calculate_finish_date(start_date, 0)
+        self.assertEqual(finish_date, datetime.date(2016, 9, 26))
+        self.assertEqual(finish_date.weekday(), 0)  # Monday

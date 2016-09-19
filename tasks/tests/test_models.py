@@ -1,3 +1,4 @@
+import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
 from tasks.models import Project, Priority, TaskStatus, Task
@@ -20,6 +21,7 @@ class ProjectModelTest(TestCase):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', created_by=creator)
         self.assertEqual(project.total_work_left, 0)
+        self.assertEqual(project.finish_date, datetime.date.today())  # Does not work on weekends
         Task.objects.create(project=project, name='task_1', work_left=1, created_by=creator)
         self.assertEqual(project.total_work_left, 1)
         Task.objects.create(project=project, name='task_2', work_left=2, created_by=creator)
