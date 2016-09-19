@@ -19,6 +19,7 @@
             <th> Status </th>
             <th> Priority </th>
             <th colspan="2"> Work remaining </th>
+            <th colspan="2"> Est. finish date </th>
         </tr>
         </thead>
         <tbody>
@@ -30,16 +31,17 @@
             <td> {{ task.priority.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             <td class="text-right"> {{ task.cumulative_work_left }} </td>
+            <td class="text-right"> {{ task.finish_date|date:"Y-m-d" }} </td>
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
         </tr>
     {% endfor %}
         <tr>
             <th colspan="4"> Total </th>
             <th class="text-right"> {{ project.total_work_left }} </th>
-            <td> &nbsp;</td>
+            <td colspan="3"> &nbsp;</td>
         </tr>
         <tr>
-            <th colspan="4"> Estimated finish date </th>
+            <th colspan="6"> Estimated finish date </th>
             <th class="text-right"> {{ project.finish_date|date:"Y-m-d" }} </th>
             <td> &nbsp;</td>
         </tr>

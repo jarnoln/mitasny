@@ -88,6 +88,11 @@ class Task(models.Model):
         sum_value = sum_dict['work_left__sum']
         return sum_value + self.work_left
 
+    @property
+    def finish_date(self):
+        days_left = self.cumulative_work_left
+        start_date = datetime.date.today()
+        return calculate_finish_date(start_date, days_left)
 
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:

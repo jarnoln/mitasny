@@ -181,7 +181,6 @@ class UpdateTaskTest(ExtTestCase):
         self.assertEqual(response.context['task'].project, project)
         self.assertEqual(response.context['project'], project)
         self.assertEqual(response.context['message'], '')
-        #self.assertEqual(response.context['message'], '')
 
     def test_can_update_task(self):
         creator = self.create_and_log_in_user()
