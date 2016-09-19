@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import Project
 
 
@@ -49,12 +50,12 @@ class ProjectDelete(DeleteView):
 
     def get_object(self):
         project = super(ProjectDelete, self).get_object()
-        # if blog.can_edit(self.request.user):
-        #    if blog.articles().count() == 0:
-        return project
+        if project.can_edit(self.request.user):
+            if project.tasks.count() == 0:
+                return project
 
         # Todo: Smarter way to handle this
-        # raise Http404
+        raise Http404
 
     def render_to_response(self, context, **response_kwargs):
         # if self.object.can_edit(self.request.user):

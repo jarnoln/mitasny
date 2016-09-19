@@ -82,7 +82,6 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(response.context['project'], project)
         self.assertEqual(response.context['message'], '')
 
-
     def test_can_create_new_task(self):
         self.assertEqual(Task.objects.all().count(), 0)
         creator = self.create_and_log_in_user()

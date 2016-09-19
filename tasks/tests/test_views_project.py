@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from tasks.models import Project
+from tasks.models import Project, Task
 from .ext_test_case import ExtTestCase
 
 
@@ -141,4 +141,15 @@ class DeleteProjectPageTest(ExtTestCase):
         self.assertEqual(Project.objects.all().count(), 1)
         response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
         self.assertEqual(Project.objects.all().count(), 1)
+        self.assertTemplateUsed(response, '404.html')
+
+    def test_cant_delete_project_if_contains_tasks(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
         self.assertTemplateUsed(response, '404.html')
