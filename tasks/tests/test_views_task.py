@@ -97,6 +97,29 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(response.context['task'].title, 'Test task')
         self.assertEqual(response.context['task'].description, 'For testing')
         self.assertEqual(response.context['task'].work_left, 5)
+        self.assertEqual(response.context['task'].order, 0)
+
+    def test_order_increases_with_task_count(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project")
+        response = self.client.post(reverse('tasks:task_create', args=[project.name]),
+                                    {'title': 'Test task 1',
+                                     'description': '',
+                                     'work_left': '1'}, follow=True)
+        self.assertEqual(Task.objects.all().count(), 1)
+        self.assertEqual(response.context['task'].order, 0)
+        response = self.client.post(reverse('tasks:task_create', args=[project.name]),
+                                    {'title': 'Test task 2',
+                                     'description': '',
+                                     'work_left': '1'}, follow=True)
+        self.assertEqual(Task.objects.all().count(), 2)
+        self.assertEqual(response.context['task'].order, 1)
+        response = self.client.post(reverse('tasks:task_create', args=[project.name]),
+                                {'title': 'Test task 3',
+                                 'description': '',
+                                 'work_left': '1'}, follow=True)
+        self.assertEqual(Task.objects.all().count(), 3)
+        self.assertEqual(response.context['task'].order, 2)
 
     def test_cant_create_task_if_not_logged_in(self):
         creator = User.objects.create(username='creator')
