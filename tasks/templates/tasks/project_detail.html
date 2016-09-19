@@ -38,12 +38,9 @@
         <tr>
             <th colspan="4"> Total </th>
             <th class="text-right"> {{ project.total_work_left }} </th>
-            <td colspan="3"> &nbsp;</td>
-        </tr>
-        <tr>
-            <th colspan="6"> Estimated finish date </th>
+            <th> &nbsp;</th>
             <th class="text-right"> {{ project.finish_date|date:"Y-m-d" }} </th>
-            <td> &nbsp;</td>
+            <th> &nbsp;</th>
         </tr>
     {% if user.is_authenticated %}
         <tr>

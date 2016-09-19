@@ -3,11 +3,24 @@
 {% block content %}
     <h1> Projects </h1>
     <table class="table">
+        <thead>
+            <th> Name </th>
+            <th> Tasks </th>
+            <th> Work left </th>
+            <th> Estimated finish date </th>
+        </thead>
+        <tbody>
 {% for project in project_list %}
-        <tr> <td> <a href="{{ project.get_absolute_url }}"> {{ project.title }} </a> </td></tr>
+        <tr>
+            <td> <a href="{{ project.get_absolute_url }}"> {{ project.title }} </a> </td>
+            <td> {{ project.tasks.count }} </td>
+            <td> {{ project.total_work_left }} </td>
+            <td> {{ project.finish_date|date:"Y-m-d" }} </td>
+        </tr>
 {% endfor %}
 {% if user.is_authenticated %}
-        <tr> <td> <a class="btn btn-primary" href="{% url 'tasks:project_create' %}"> Create project </a> </td></tr>
+        <tr> <td colspan="4"> <a class="btn btn-primary" href="{% url 'tasks:project_create' %}"> Create project </a> </td></tr>
 {% endif %}
+        </tbody>
     </table>
 {% endblock %}
