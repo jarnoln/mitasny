@@ -30,7 +30,6 @@ class Project(models.Model):
         start_date = datetime.date.today()
         return calculate_finish_date(start_date, days_left)
 
-
     def can_edit(self, user):
         if user == self.created_by:
             return True
@@ -78,6 +77,17 @@ class Task(models.Model):
     created_by = models.ForeignKey(User, related_name='created_tasks')
     edited = models.DateTimeField(auto_now=True)
     edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks')
+
+    @property
+    def cumulative_work_left(self):
+        preceding_tasks = Task.objects.filter(project=self.project, order__lt=self.order)
+        if preceding_tasks.count() == 0:
+            return self.work_left
+
+        sum_dict = preceding_tasks.aggregate(models.Sum('work_left'))
+        sum_value = sum_dict['work_left__sum']
+        return sum_value + self.work_left
+
 
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
