@@ -31,7 +31,7 @@ class TaskDetail(DetailView):
 class TaskCreate(CreateView):
     model = models.Task
     slug_field = 'name'
-    fields = ['name', 'title', 'description']
+    fields = ['name', 'title', 'description', 'work_left']
     project = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -59,7 +59,7 @@ class TaskCreate(CreateView):
 class TaskUpdate(UpdateView):
     model = models.Task
     slug_field = 'name'
-    fields = ['title', 'description']
+    fields = ['title', 'description', 'work_left']
 
     def dispatch(self, request, *args, **kwargs):
         #logger = logging.getLogger(__name__)
@@ -81,7 +81,7 @@ class TaskUpdate(UpdateView):
             return super(TaskUpdate, self).form_valid(form)
         else:
             logger.info("Not allowed to edit. Registered:%s Creator:%s" % (self.request.user.username, self.object.created_by.username))
-            return HttpResponseRedirect(reverse('plokkeri:article', args=[self.project.name, self.object.name]))
+            return HttpResponseRedirect(reverse('tasks:task', args=[self.project.name, self.object.name]))
 
 
 class TaskDelete(DeleteView):

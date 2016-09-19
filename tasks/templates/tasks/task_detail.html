@@ -1,14 +1,10 @@
 {% extends "tasks/tasks_base.html" %}
 {% block title %} Mitasny {% endblock %}
 {% block content %}
-    <h1> Task </h1>
+
+    <h2> <a href="{{ task.project.get_absolute_url }}"> {{ task.project.title }} </a> </h2>
+    <h1> {{ task.title }} </h1>
     <table class="table">
-        <tr>
-            <th> Project </th> <td> <a href="{{ task.project.get_absolute_url }}"> {{ task.project.title }} </a> </td>
-        </tr>
-        <tr>
-            <th> Title </th> <td> {{ task.title }} </td>
-        </tr>
         <tr>
             <th> Name </th><td> {{ task.name }} </td>
         </tr>

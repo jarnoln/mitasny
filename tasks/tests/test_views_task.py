@@ -89,6 +89,7 @@ class CreateTaskTest(ExtTestCase):
         response = self.client.post(reverse('tasks:task_create', args=[project.name]), {
             'name': 'test_task',
             'title': 'Test task',
+            'work_left': '5',
             'description': 'For testing'}, follow=True)
         self.assertEqual(Project.objects.all().count(), 1)
         self.assertEqual(Task.objects.all().count(), 1)
@@ -96,6 +97,7 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(response.context['task'].name, 'test_task')
         self.assertEqual(response.context['task'].title, 'Test task')
         self.assertEqual(response.context['task'].description, 'For testing')
+        self.assertEqual(response.context['task'].work_left, 5)
 
     def test_cant_create_task_if_not_logged_in(self):
         creator = User.objects.create(username='creator')
@@ -122,7 +124,8 @@ class CreateTaskTest(ExtTestCase):
             {
                 'name': 'test_task',
                 'title': 'Test task',
-                'description': 'For testing'
+                'description': 'For testing',
+                'work_left': '5'
             },
             follow=True)
         self.assertEqual(Task.objects.all().count(), 1)
@@ -163,7 +166,7 @@ class UpdateTaskTest(ExtTestCase):
         task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
         self.assertEqual(Project.objects.all().count(), 1)
         response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
-                                    {'title': 'Task updated', 'description': 'Updated'},
+                                    {'title': 'Task updated', 'description': 'Updated', 'work_left': '5'},
                                     follow=True)
         self.assertEqual(Task.objects.all().count(), 1)
         task = Task.objects.all()[0]
@@ -172,6 +175,7 @@ class UpdateTaskTest(ExtTestCase):
         self.assertTemplateUsed(response, 'tasks/task_detail.html')
         self.assertEqual(response.context['task'].title, 'Task updated')
         self.assertEqual(response.context['task'].description, 'Updated')
+        self.assertEqual(response.context['task'].work_left, 5)
 
 
 class DeleteTaskPageTest(ExtTestCase):
