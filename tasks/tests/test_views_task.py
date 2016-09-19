@@ -130,6 +130,50 @@ class CreateTaskTest(ExtTestCase):
         self.assertContains(response, 'Task with this Name already exists')
 
 
+class UpdateTaskTest(ExtTestCase):
+    def test_reverse_task_edit(self):
+        self.assertEqual(reverse('tasks:task_update', args=['test_project', 'test_task']),
+                         '/project/test_project/task/test_task/update/')
+
+    def test_get_edit_url(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_blog")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task")
+        self.assertEqual(task.get_edit_url(), reverse('tasks:task_update', args=[project.name, task.name]))
+
+    def test_uses_correct_template(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task")
+        response = self.client.get(reverse('tasks:task_update', args=[project.name, task.name]))
+        self.assertTemplateUsed(response, 'tasks/task_form.html')
+
+    def test_default_context(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task")
+        response = self.client.get(reverse('tasks:task_update', args=[project.name, task.name]))
+        self.assertEqual(response.context['task'], task)
+        self.assertEqual(response.context['task'].project, project)
+        #self.assertEqual(response.context['message'], '')
+
+    def test_can_update_task(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        self.assertEqual(Project.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
+                                    {'title': 'Task updated', 'description': 'Updated'},
+                                    follow=True)
+        self.assertEqual(Task.objects.all().count(), 1)
+        task = Task.objects.all()[0]
+        self.assertEqual(task.title, 'Task updated')
+        self.assertEqual(task.description, 'Updated')
+        self.assertTemplateUsed(response, 'tasks/task_detail.html')
+        self.assertEqual(response.context['task'].title, 'Task updated')
+        self.assertEqual(response.context['task'].description, 'Updated')
+
+
 class DeleteTaskPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
         self.assertEqual(reverse('tasks:task_delete', args=['test_project', 'test_task']),

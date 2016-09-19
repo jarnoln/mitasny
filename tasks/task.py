@@ -1,5 +1,6 @@
 import logging
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.shortcuts import get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
@@ -53,6 +54,34 @@ class TaskCreate(CreateView):
         context['project'] = self.project
         context['message'] = self.request.GET.get('message', '')
         return context
+
+
+class TaskUpdate(UpdateView):
+    model = models.Task
+    slug_field = 'name'
+    fields = ['title', 'description']
+
+    def dispatch(self, request, *args, **kwargs):
+        #logger = logging.getLogger(__name__)
+        self.project = get_object_or_404(models.Project, name=self.kwargs['project_name'])
+        #logger.warning("Registered:%s Creator:%s" % (self.request.user.username, self.blog.created_by.username))
+        return super(TaskUpdate, self).dispatch(request,*args, **kwargs)
+
+    def render_to_response(self, context, **response_kwargs):
+        if self.object.can_edit(self.request.user):
+            return super(TaskUpdate, self).render_to_response(context, **response_kwargs)
+        else:
+            return HttpResponseRedirect(reverse('tasks:task', args=[self.project.name, self.object.name]))
+
+    def form_valid(self, form):
+        logger = logging.getLogger(__name__)
+        #logger.warning("Posting valid form")
+        if self.object.can_edit(self.request.user):
+            #logger.warning("Allowed to edit. Registered:%s Creator:%s" % (self.request.user.username, self.blog.created_by.username))
+            return super(TaskUpdate, self).form_valid(form)
+        else:
+            logger.info("Not allowed to edit. Registered:%s Creator:%s" % (self.request.user.username, self.object.created_by.username))
+            return HttpResponseRedirect(reverse('plokkeri:article', args=[self.project.name, self.object.name]))
 
 
 class TaskDelete(DeleteView):

@@ -62,7 +62,7 @@ class Task(models.Model):
     edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks')
 
     def can_edit(self, user):
-        if user == self.created_by:
+        if user == self.created_by or user == self.owner or user == self.project.created_by:
             return True
 
         return False
@@ -72,3 +72,6 @@ class Task(models.Model):
 
     def get_absolute_url(self):
         return reverse('tasks:task', args=[self.project.name, self.name])
+
+    def get_edit_url(self):
+        return reverse('tasks:task_update', args=[self.project.name, self.name])
