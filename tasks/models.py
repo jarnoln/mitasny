@@ -55,7 +55,7 @@ class Task(models.Model):
     status = models.ForeignKey(TaskStatus, null=True)
     owner = models.ForeignKey(User, null=True, related_name='tasks')
     work_done = models.PositiveSmallIntegerField(default=0)
-    work_left = models.PositiveSmallIntegerField(default=0)
+    work_left = models.PositiveSmallIntegerField(default=0) #, help_text=ugettext_lazy('days'))
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='created_tasks')
     edited = models.DateTimeField(auto_now=True)

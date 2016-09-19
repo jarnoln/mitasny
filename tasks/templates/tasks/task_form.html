@@ -14,8 +14,16 @@
     {% csrf_token %}
 <table class="table">
 {{ form.as_table }}
-    {% trans "Save" as save_txt %}
-    <tr> <td colspan="2"> <input type="submit" class="btn btn-primary" value="{{ save_txt }}"> </td> </tr>
+    <tr>
+        {% trans "Save" as save_txt %}
+        <td>
+            <input type="submit" class="btn btn-primary" value="{{ save_txt }}">
+            <a class="btn btn-default" href="{% url 'tasks:project' project.name %}">Back to project</a>
+        </td>
+        {% if task %}
+        <td> <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete</a> </td>
+        {% endif %}
+    </tr>
 </table>
 
 </form>
