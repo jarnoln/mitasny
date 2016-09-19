@@ -5,6 +5,7 @@ from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
 from calculate_finish_date import calculate_finish_date
 
+
 class Project(models.Model):
     name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
                             help_text=ugettext_lazy('Must be unique. Used in URL.'))
@@ -67,6 +68,7 @@ class Task(models.Model):
                             help_text=ugettext_lazy('Must be unique. Used in URL.'))
     title = models.CharField(max_length=250, verbose_name=ugettext_lazy('task'))
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    order = models.PositiveSmallIntegerField(default=0)
     priority = models.ForeignKey(Priority, null=True)
     status = models.ForeignKey(TaskStatus, null=True)
     owner = models.ForeignKey(User, null=True, related_name='tasks')
