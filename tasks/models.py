@@ -53,6 +53,7 @@ class Task(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
     priority = models.ForeignKey(Priority, null=True)
     status = models.ForeignKey(TaskStatus, null=True)
+    # owner = models.ForeignKey(User, null=True, related_name='tasks')
     work_done = models.PositiveSmallIntegerField(default=0)
     work_left = models.PositiveSmallIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
