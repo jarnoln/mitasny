@@ -189,7 +189,7 @@ class UpdateTaskTest(ExtTestCase):
         task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
         self.assertEqual(Project.objects.all().count(), 1)
         response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
-                                    {'title': 'Task updated', 'description': 'Updated', 'work_left': '5'},
+                                    {'title': 'Task updated', 'description': 'Updated', 'work_left': '5', 'order': '9'},
                                     follow=True)
         self.assertEqual(Task.objects.all().count(), 1)
         task = Task.objects.all()[0]
@@ -199,6 +199,7 @@ class UpdateTaskTest(ExtTestCase):
         self.assertEqual(response.context['task'].title, 'Task updated')
         self.assertEqual(response.context['task'].description, 'Updated')
         self.assertEqual(response.context['task'].work_left, 5)
+        self.assertEqual(response.context['task'].order, 9)
 
 
 class DeleteTaskPageTest(ExtTestCase):

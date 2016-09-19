@@ -93,3 +93,6 @@ class Task(models.Model):
 
     def get_edit_url(self):
         return reverse('tasks:task_update', args=[self.project.name, self.name])
+
+    class Meta:
+        ordering = ['order', 'title']
