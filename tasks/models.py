@@ -14,6 +14,14 @@ class Project(models.Model):
     edited = models.DateTimeField(auto_now=True)
     edited_by = models.ForeignKey(User, null=True, related_name='edited_projects')
 
+    @property
+    def total_work_left(self):
+        if self.tasks.count() == 0:
+            return 0
+
+        sum_dict = self.tasks.aggregate(models.Sum('work_left'))
+        return sum_dict['work_left__sum']
+
     def can_edit(self, user):
         if user == self.created_by:
             return True

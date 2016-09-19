@@ -16,6 +16,17 @@ class ProjectModelTest(TestCase):
         project = Project.objects.create(name='test_project', created_by=creator)
         self.assertEqual(project.get_absolute_url(), '/project/test_project/')
 
+    def test_total_work_left(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        self.assertEqual(project.total_work_left, 0)
+        Task.objects.create(project=project, name='task_1', work_left=1, created_by=creator)
+        self.assertEqual(project.total_work_left, 1)
+        Task.objects.create(project=project, name='task_2', work_left=2, created_by=creator)
+        self.assertEqual(project.total_work_left, 3)
+        Task.objects.create(project=project, name='task_3', work_left=3, created_by=creator)
+        self.assertEqual(project.total_work_left, 6)
+
 
 class PriorityModelTest(TestCase):
     def test_can_save_and_load(self):

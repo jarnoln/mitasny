@@ -26,10 +26,15 @@
             <td> <a href="{{ task.get_absolute_url }}"> {{ task.title }} </a> </td>
             <td> {{ task.status.title }} </td>
             <td> {{ task.priority.title }} </td>
-            <td> {{ task.work_left }} </td>
+            <td class="text-right"> {{ task.work_left }} </td>
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
         </tr>
     {% endfor %}
+        <tr>
+            <th colspan="3"> Total </th>
+            <th class="text-right"> {{ project.total_work_left }} </th>
+            <td> &nbsp;</td>
+        </tr>
     {% if user.is_authenticated %}
         <tr> <td> <a class="btn btn-default" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td></tr>
     {% endif %}
