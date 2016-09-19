@@ -2,7 +2,7 @@
 {% block title %} Mitasny {% endblock %}
 {% block content %}
     <h1> Task </h1>
-    <table>
+    <table class="table">
         <tr>
             <th> Project </th> <td> <a href="{{ task.project.get_absolute_url }}"> {{ task.project.title }} </a> </td>
         </tr>
@@ -16,7 +16,8 @@
             <th> Description </th><td> {{ task.description }} </td>
         </tr>
         <tr>
-            <td> <a href="{% url 'tasks:project_delete' task.project.name %}">[Delete project]</a> </td><td> &nbsp; </td>
+            <td> &nbsp; </td>
+            <td> <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete task</a> </td>
         </tr>
     </table>
 {% endblock %}

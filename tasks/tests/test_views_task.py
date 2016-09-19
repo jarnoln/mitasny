@@ -128,3 +128,42 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(Task.objects.all().count(), 1)
         self.assertTemplateUsed(response, 'tasks/task_form.html')
         self.assertContains(response, 'Task with this Name already exists')
+
+
+class DeleteTaskPageTest(ExtTestCase):
+    def test_reverse_blog_delete(self):
+        self.assertEqual(reverse('tasks:task_delete', args=['test_project', 'test_task']),
+                         '/project/test_project/task/test_task/delete/')
+
+    def test_uses_correct_template(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        response = self.client.get(reverse('tasks:task_delete', args=[project.name, task.name]))
+        self.assertTemplateUsed(response, 'tasks/task_confirm_delete.html')
+
+    def test_can_delete_task(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:task_delete', args=[project.name, task.name]), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 0)
+
+    def test_404_no_project(self):
+        creator = self.create_and_log_in_user()
+        response = self.client.get(reverse('tasks:task_delete', args=['test_project', 'test_task']))
+        self.assertTemplateUsed(response, '404.html')
+
+    def test_cant_delete_task_if_not_logged_in(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:task_delete', args=[project.name, task.name]), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        self.assertTemplateUsed(response, '404.html')

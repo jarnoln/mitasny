@@ -1,6 +1,8 @@
 import logging
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView, TemplateView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 import models
 
 
@@ -51,3 +53,23 @@ class TaskCreate(CreateView):
         context['project'] = self.project
         context['message'] = self.request.GET.get('message', '')
         return context
+
+
+class TaskDelete(DeleteView):
+    slug_field = 'name'
+    model = models.Task
+    success_url = reverse_lazy('tasks:projects')
+
+    def get_object(self):
+        task = super(TaskDelete, self).get_object()
+        if task.can_edit(self.request.user):
+            return task
+
+        # Todo: Smarter way to handle this
+        raise Http404
+
+    def render_to_response(self, context, **response_kwargs):
+        # if self.object.can_edit(self.request.user):
+            # if self.object.articles().count() == 0:
+        return super(TaskDelete, self).render_to_response(context, **response_kwargs)
+        # return HttpResponseRedirect(reverse('tasks:project', args=[self.object.name]))
