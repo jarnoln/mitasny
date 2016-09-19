@@ -16,7 +16,7 @@
             <th> Description </th><td> {{ task.description }} </td>
         </tr>
         <tr>
-            <td> &nbsp; </td>
+            <td> <a class="btn btn-primary" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
             <td> <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete task</a> </td>
         </tr>
     </table>

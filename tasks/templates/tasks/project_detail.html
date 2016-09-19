@@ -37,6 +37,7 @@
             <td> {{ task.status.title }} </td>
             <td> {{ task.priority.title }} </td>
             <td> {{ task.work_left }} </td>
+            <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
         </tr>
     {% endfor %}
     {% if user.is_authenticated %}

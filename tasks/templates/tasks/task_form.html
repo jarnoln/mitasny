@@ -3,13 +3,14 @@
 {% block title %} Mitasny {% endblock %}
 
 {% block content %}
-    {% if task %}
+{% if task %}
 <h1> {{ task.title }} </h1>
-    {% elif project %}
+<form action="{% url 'tasks:task_update' task.project.name task.name %}" method="post">
+{% elif project %}
 <h1> {{ project.title }} </h1>
 <h1> {% trans "Create new task" %} </h1>
 <form action="{% url 'tasks:task_create' project.name %}" method="post">
-    {% endif %}
+{% endif %}
     {% csrf_token %}
 <table class="table">
 {{ form.as_table }}
