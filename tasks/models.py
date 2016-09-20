@@ -79,7 +79,7 @@ class Task(models.Model):
     order = models.PositiveSmallIntegerField(default=0)
     priority = models.ForeignKey(Priority, null=True)
     phase = models.ForeignKey(Phase, null=True, blank=True)
-    status = models.ForeignKey(TaskStatus, null=True)
+    # status = models.ForeignKey(TaskStatus, null=True)
     owner = models.ForeignKey(User, null=True, related_name='tasks')
     work_done = models.PositiveSmallIntegerField(default=0)
     work_left = models.PositiveSmallIntegerField(default=1) #, help_text=ugettext_lazy('days'))
