@@ -28,6 +28,21 @@ class ProjectDetail(DetailView):
         return context
 
 
+class ProjectWeekly(DetailView):
+    model = Project
+    slug_field = 'name'
+    fields = ['name', 'title', 'description']
+    context_object_name = 'project'
+    template_name = 'tasks/project_weekly.html'
+    def get_context_data(self, **kwargs):
+        context = super(ProjectWeekly, self).get_context_data(**kwargs)
+        #context['article_list'] = Article.objects.filter(blog=self.object)
+        context['message'] = self.request.GET.get('message', '')
+        context['can_edit'] = self.object.can_edit(self.request.user)
+        # context['articles'] = self.object.articles()
+        return context
+
+
 class ProjectCreate(CreateView):
     model = Project
     slug_field = 'name'
