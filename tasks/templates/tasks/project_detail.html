@@ -25,7 +25,7 @@
     {% for task in project.tasks.all %}
         <tr>
             <td> {{ task.order }} </td>
-            <td> <a href="{{ task.get_absolute_url }}"> {{ task.title }} </a> </td>
+            <td> <a href="{{ task.get_absolute_url }}" title="{{ task.description }}"> {{ task.title }} </a> </td>
             <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             <td class="text-right"> {{ task.cumulative_work_left }} </td>

@@ -10,37 +10,61 @@
 {% endif %}
     </table>
 
-{% if project.tasks %}
+{% if project.tasks_finished %}
+<b> Last week </b>
+<ul>
+    {% for task in project.tasks_finished.all %}
+    <li> {{ task.title }} </li>
+        {% if task.description %}
+        <ul> <li> {{ task.description }} </li></ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if project.tasks_ongoing %}
+<b> This week </b>
+<ul>
+    {% for task in project.tasks_ongoing.all %}
+    <li> {{ task.title }} </li>
+        {% if task.description %}
+        <ul> <li> {{ task.description }} </li></ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+<b> Backlog </b>
+{% if project.tasks_pending %}
     <table>
         <thead>
         <tr>
-            <th style="width:0%"> # </th>
-            <th style="width:50%"> Name </th>
-            <th> Status </th>
-            <th colspan="2"> Work remaining </th>
-            <th colspan="2"> Est. finish date </th>
+            <th colspan="1"> &nbsp; </th>
+            <th colspan="1"> Days of </th>
+            <th colspan="1"> Estimated </th>
+        </tr>
+        <tr>
+            <th> Task </th>
+            <th colspan="1"> work left </th>
+            <th colspan="1"> finish date </th>
         </tr>
         </thead>
         <tbody>
-    {% for task in project.tasks.all %}
+    {% for task in project.tasks_pending.all %}
         <tr>
-            <td> {{ task.order }} </td>
             <td> {{ task.title }} </td>
-            <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
-            <td class="text-right"> {{ task.cumulative_work_left }} </td>
             <td class="text-right"> {{ task.finish_date|date:"Y-m-d" }} </td>
         </tr>
     {% endfor %}
         <tr>
-            <td colspan="3"> <b> Total: {{ project.total_work_left_string }} </b> </td>
+            <td colspan="1"> <b> Total </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
-            <td> &nbsp;&nbsp;</td>
             <td class="text-right"> <b> {{ project.finish_date|date:"Y-m-d" }} </b> </td>
             <td> &nbsp;&nbsp;</td>
         </tr>
         </tbody>
     </table>
 {% endif %}
-
+<p> <b> Estimated total work required by remaining tasks: {{ project.total_work_left_string }} </b> </p>
 {% endblock %}
