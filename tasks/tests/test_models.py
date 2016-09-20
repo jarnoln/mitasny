@@ -144,6 +144,21 @@ class TaskModelTest(TestCase):
         task = Task.objects.create(project=project, name='test_task', title='Test task', created_by=creator)
         self.assertEqual(str(task), 'test_project:test_task')
 
+    def test_work_left_list(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        task = Task.objects.create(project=project, order=1, name='task_1', work_left=0, created_by=creator)
+        self.assertEqual(task.work_left_list, [])
+        task.work_left = 1
+        task.save()
+        self.assertEqual(len(task.work_left_list), 1)
+        task.work_left = 2
+        task.save()
+        self.assertEqual(len(task.work_left_list), 2)
+        task.work_left = 1337
+        task.save()
+        self.assertEqual(len(task.work_left_list), 1337)
+
     def test_cumulative_work_left(self):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', created_by=creator)

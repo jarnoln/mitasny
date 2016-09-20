@@ -131,6 +131,14 @@ class Task(models.Model):
     edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks')
 
     @property
+    def work_left_list(self):
+        """ List with as many items as days of work left. For loopiing in templates """
+        if self.work_left <= 0:
+            return []
+        else:
+            return range(0, self.work_left)
+
+    @property
     def cumulative_work_before(self):
         """ How many days of work in tasks before this one """
         preceding_tasks = Task.objects.filter(project=self.project, order__lt=self.order)
