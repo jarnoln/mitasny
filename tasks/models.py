@@ -131,14 +131,20 @@ class Task(models.Model):
     edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks')
 
     @property
-    def cumulative_work_left(self):
+    def cumulative_work_before(self):
+        """ How many days of work in tasks before this one """
         preceding_tasks = Task.objects.filter(project=self.project, order__lt=self.order)
         if preceding_tasks.count() == 0:
-            return self.work_left
+            return 0
 
         sum_dict = preceding_tasks.aggregate(models.Sum('work_left'))
         sum_value = sum_dict['work_left__sum']
-        return sum_value + self.work_left
+        return sum_value
+
+    @property
+    def cumulative_work_left(self):
+        """ How many days of work until this and all the previous tasks are done """
+        return self.cumulative_work_before + self.work_left
 
     @property
     def finish_date(self):
