@@ -59,7 +59,8 @@ class ProjectPageTest(TestCase):
 
 class ProjectWeeklyReportTest(TestCase):
     def test_reverse(self):
-        self.assertEqual(reverse('tasks:project_weekly', args=['test_project']), '/project/test_project/weekly/')
+        self.assertEqual(reverse('tasks:project_weekly', args=['test_project']),
+                         '/project/test_project/weekly_report.html')
 
     def test_uses_correct_template(self):
         creator = User.objects.create(username='creator')

@@ -49,6 +49,8 @@
     </table>
 {% endif %}
 
+<p> Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a> </p>
+
 {% if user.is_authenticated %}
 <p class="text-right"> <a class="btn btn-danger" href="{% url 'tasks:project_delete' project.name %}">Delete project</a> </p>
 {% endif %}
