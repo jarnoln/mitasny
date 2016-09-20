@@ -27,7 +27,7 @@
         <tr>
             <td> {{ task.order }} </td>
             <td> <a href="{{ task.get_absolute_url }}"> {{ task.title }} </a> </td>
-            <td> {{ task.status.title }} </td>
+            <td> {{ task.phase.title }} </td>
             <td> {{ task.priority.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             <td class="text-right"> {{ task.cumulative_work_left }} </td>

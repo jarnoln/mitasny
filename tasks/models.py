@@ -69,6 +69,13 @@ class Phase(models.Model):
     order = models.PositiveSmallIntegerField(default=0)
     element_class = models.CharField(default='', blank=True, max_length=250)  # CSS class to be used in HTML
 
+    def __unicode__(self):
+        return '%d:%s:%s' % (self.order, self.name, self.title)
+
+
+    class Meta:
+        ordering = ['order', 'title']
+
 
 class Task(models.Model):
     project = models.ForeignKey(Project, null=False, related_name='tasks')
@@ -111,7 +118,7 @@ class Task(models.Model):
         return False
 
     def __unicode__(self):
-        return self.name
+        return '%s:%s' % (self.project.name, self.name)
 
     def get_absolute_url(self):
         return reverse('tasks:task', args=[self.project.name, self.name])

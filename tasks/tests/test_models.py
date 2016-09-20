@@ -17,6 +17,11 @@ class ProjectModelTest(TestCase):
         project = Project.objects.create(name='test_project', created_by=creator)
         self.assertEqual(project.get_absolute_url(), '/project/test_project/')
 
+    def test_convert_to_string(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        self.assertEqual(str(project), 'test_project')
+
     def test_total_work_left(self):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', created_by=creator)
@@ -61,6 +66,10 @@ class PhaseModelTest(TestCase):
         self.assertEqual(Phase.objects.all().count(), 1)
         self.assertEqual(Phase.objects.all()[0], phase)
 
+    def test_convert_to_string(self):
+        phase = Phase.objects.create(name='ongoing', title='Ongoing', order=2)
+        self.assertEqual(str(phase), '2:ongoing:Ongoing')
+
 
 class TaskModelTest(TestCase):
     def test_can_save_and_load(self):
@@ -76,6 +85,12 @@ class TaskModelTest(TestCase):
         project = Project.objects.create(name='test_project', created_by=creator)
         task = Task.objects.create(project=project, name='test_task', title='Test task', created_by=creator)
         self.assertEqual(task.get_absolute_url(), '/project/test_project/task/test_task/')
+
+    def test_convert_to_string(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        task = Task.objects.create(project=project, name='test_task', title='Test task', created_by=creator)
+        self.assertEqual(str(task), 'test_project:test_task')
 
     def test_cumulative_work_left(self):
         creator = User.objects.create(username='creator')
