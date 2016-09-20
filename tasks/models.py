@@ -72,7 +72,6 @@ class Phase(models.Model):
     def __unicode__(self):
         return '%d:%s:%s' % (self.order, self.name, self.title)
 
-
     class Meta:
         ordering = ['order', 'title']
 
@@ -110,12 +109,17 @@ class Task(models.Model):
         days_left = self.cumulative_work_left
         start_date = datetime.date.today()
         return calculate_finish_date(start_date, days_left)
-
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
             return True
 
         return False
+
+    def set_phase(self, phase_name):
+        phases = Phase.objects.filter(name=phase_name)
+        if phases.count() == 1:
+            self.phase = phases.first()
+            self.save()
 
     def __unicode__(self):
         return '%s:%s' % (self.project.name, self.name)

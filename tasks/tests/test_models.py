@@ -110,3 +110,12 @@ class TaskModelTest(TestCase):
         today = datetime.date.today()
         if today.weekday() < 5:    # Does not work on weekends
             self.assertEqual(task_1.finish_date, today)
+
+    def test_set_phase(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        task = Task.objects.create(project=project, order=1, name='task_1', work_left=0, created_by=creator)
+        self.assertEqual(task.phase, None)
+        phase = Phase.objects.create(name='ongoing', title='Ongoing', order=2)
+        task.set_phase('ongoing')
+        self.assertEqual(task.phase, phase)
