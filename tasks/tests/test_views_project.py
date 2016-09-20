@@ -79,6 +79,28 @@ class ProjectWeeklyReportTest(TestCase):
         self.assertTemplateUsed(response, '404.html')
 
 
+class ProjectChartReportTest(TestCase):
+    def test_reverse(self):
+        self.assertEqual(reverse('tasks:project_chart', args=['test_project']),
+                         '/project/test_project/chart/')
+
+    def test_uses_correct_template(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
+        response = self.client.get(reverse('tasks:project_chart', args=[project.name]))
+        self.assertTemplateUsed(response, 'tasks/project_chart.html')
+
+    def test_default_context(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
+        response = self.client.get(reverse('tasks:project_chart', args=[project.name]))
+        self.assertEqual(response.context['project'], project)
+
+    def test_404_not_found(self):
+        response = self.client.get(reverse('tasks:project', args=['missing_project']))
+        self.assertTemplateUsed(response, '404.html')
+
+
 class CreateProjectTest(ExtTestCase):
     def test_reverse_project_create(self):
         self.assertEqual(reverse('tasks:project_create'), '/project/create/')
