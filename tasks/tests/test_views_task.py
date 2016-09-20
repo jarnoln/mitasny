@@ -92,13 +92,15 @@ class CreateTaskTest(ExtTestCase):
             'description': 'For testing'}, follow=True)
         self.assertEqual(Project.objects.all().count(), 1)
         self.assertEqual(Task.objects.all().count(), 1)
-        self.assertEqual(response.context['task'].project, project)
-        self.assertEqual(response.context['task'].name, 'test-task')
-        self.assertEqual(response.context['task'].title, 'Test task')
-        self.assertEqual(response.context['task'].description, 'For testing')
-        self.assertEqual(response.context['task'].work_left, 5)
-        self.assertEqual(response.context['task'].order, 0)
-        self.assertEqual(response.context['task'].phase, None)
+        task = Task.objects.first()
+        self.assertEqual(task.project, project)
+        self.assertEqual(task.name, 'test-task')
+        self.assertEqual(task.title, 'Test task')
+        self.assertEqual(task.description, 'For testing')
+        self.assertEqual(task.work_left, 5)
+        self.assertEqual(task.order, 0)
+        self.assertEqual(task.phase, None)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
 
     def test_order_increases_with_task_count(self):
         creator = self.create_and_log_in_user()
@@ -108,19 +110,19 @@ class CreateTaskTest(ExtTestCase):
                                      'description': '',
                                      'work_left': '1'}, follow=True)
         self.assertEqual(Task.objects.all().count(), 1)
-        self.assertEqual(response.context['task'].order, 0)
+        self.assertEqual(Task.objects.first().order, 0)
         response = self.client.post(reverse('tasks:task_create', args=[project.name]),
                                     {'title': 'Test task 2',
                                      'description': '',
                                      'work_left': '1'}, follow=True)
         self.assertEqual(Task.objects.all().count(), 2)
-        self.assertEqual(response.context['task'].order, 1)
+        self.assertEqual(Task.objects.last().order, 1)
         response = self.client.post(reverse('tasks:task_create', args=[project.name]),
                                 {'title': 'Test task 3',
                                  'description': '',
                                  'work_left': '1'}, follow=True)
         self.assertEqual(Task.objects.all().count(), 3)
-        self.assertEqual(response.context['task'].order, 2)
+        self.assertEqual(Task.objects.last().order, 2)
 
     def test_initial_phase_set_to_pending(self):
         self.create_default_phases()
@@ -131,7 +133,7 @@ class CreateTaskTest(ExtTestCase):
             'work_left': '5',
             'description': 'For testing'}, follow=True)
         self.assertEqual(Task.objects.all().count(), 1)
-        self.assertEqual(response.context['task'].phase.name, 'pending')
+        self.assertEqual(Task.objects.first().phase.name, 'pending')
 
     def test_cant_create_task_if_not_logged_in(self):
         creator = User.objects.create(username='creator')

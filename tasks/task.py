@@ -54,6 +54,9 @@ class TaskCreate(CreateView):
         if phases.count() > 0:
             form.instance.phase = phases.first()
 
+        if self.project:
+            self.success_url = reverse('tasks:project', args=[self.project.name])
+
         return super(TaskCreate, self).form_valid(form)
 
     def get_context_data(self, **kwargs):
