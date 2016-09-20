@@ -39,14 +39,12 @@
     <table>
         <thead>
         <tr>
-            <th colspan="1"> &nbsp; </th>
-            <th colspan="1"> Days of </th>
-            <th colspan="1"> Estimated </th>
-        </tr>
-        <tr>
             <th> Task </th>
-            <th colspan="1"> work left </th>
-            <th colspan="1"> finish date </th>
+            <th colspan="1"> Days </th>
+            <th class="week_marker" colspan="5"> Week 1 </th>
+        {% for week in project.total_work_left_weeks_list %}
+            <th class="week_marker" colspan="5"> Week {{ week|add:2 }} </th>
+        {% endfor %}
         </tr>
         </thead>
         <tbody>
@@ -54,16 +52,18 @@
         <tr>
             <td> {{ task.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
-            {% for i in task.work_left_list %}
-            <td> {{ i }} </td>
+            {% for i in task.cumulative_work_before_list %}
+            <td class="day_marker white"> &nbsp; </td>
             {% endfor %}
-            <td class="text-right"> {{ task.finish_date|date:"Y-m-d" }} </td>
+            {% for i in task.work_left_list %}
+            <td class="day_marker green"> &nbsp; </td>
+            {% endfor %}
+            <td colspan="2"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
         <tr>
             <td colspan="1"> <b> Total </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
-            <td class="text-right"> <b> {{ project.finish_date|date:"Y-m-d" }} </b> </td>
             <td> &nbsp;&nbsp;</td>
         </tr>
         </tbody>

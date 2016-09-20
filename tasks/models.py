@@ -25,6 +25,14 @@ class Project(models.Model):
         return sum_dict['work_left__sum']
 
     @property
+    def total_work_left_list(self):
+        return range(0, self.total_work_left)
+
+    @property
+    def total_work_left_weeks_list(self):
+        return range(0, self.total_work_left / 5)
+
+    @property
     def total_work_left_string(self):
         days = self.total_work_left
         weeks = days / 5

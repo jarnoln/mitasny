@@ -4,18 +4,40 @@
     <meta charset="UTF-8">
     <title> {% block title %}Mitasny{% endblock %}</title>
     <style>
-        th {
-            text-align: left;
-        }
-        .text-right {
-            text-align: right;
-        }
-        td.success {
-            background-color: rgb(200,255,200);
-        }
-        td.warning {
-            background-color: rgb(255,255,200);
-        }
+      td.day_marker {
+        border-style: solid;
+        border-width: 2px;
+        width: 20px;
+        height: 20px;
+      }
+
+      td.white {
+        border-color: #aaaaaa;
+      }
+
+      td.green {
+        border-color: green;
+        background-color:green;
+      }
+
+      th.week_marker {
+        text-align: center;
+        border-style: solid;
+        border-width: 0px 2px 0px 2px;
+        border-color: #aaaaaa;
+      }
+      th {
+        text-align: left;
+      }
+      .text-right {
+        text-align: right;
+      }
+      td.success {
+        background-color: rgb(200,255,200);
+      }
+      td.warning {
+        background-color: rgb(255,255,200);
+      }
 
     </style>
   </head>
