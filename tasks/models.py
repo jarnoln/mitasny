@@ -79,6 +79,14 @@ class Project(models.Model):
     def tasks_pending(self):
         return self.tasks_by_phase_name('pending')
 
+    @property
+    def tasks_unfinished(self):
+        phases = Phase.objects.filter(name='finished')
+        if phases.count() == 1:
+            phase = phases.first()
+            return Task.objects.filter(project=self).exclude(phase=phase)
+        return Task.objects.none()
+
     def __unicode__(self):
         return self.name
 

@@ -35,20 +35,20 @@
 {% endif %}
 
 <b> Backlog </b>
-{% if project.tasks_pending %}
+{% if project.tasks_unfinished %}
     <table>
         <thead>
         <tr>
             <th> Task </th>
             <th colspan="1"> Days </th>
-            <th class="week_marker" colspan="5"> Week 1 </th>
+            <th class="week_marker" colspan="5"> Week 38 </th>
         {% for week in project.total_work_left_weeks_list %}
-            <th class="week_marker" colspan="5"> Week {{ week|add:2 }} </th>
+            <th class="week_marker" colspan="5"> Week {{ week|add:39 }} </th>
         {% endfor %}
         </tr>
         </thead>
         <tbody>
-    {% for task in project.tasks_pending.all %}
+    {% for task in project.tasks_unfinished.all %}
         <tr>
             <td> {{ task.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
@@ -64,7 +64,9 @@
         <tr>
             <td colspan="1"> <b> Total </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
-            <td> &nbsp;&nbsp;</td>
+            <td class="text-right" colspan="{{ project.total_work_left }}">
+                Estimated finish date: <b> {{ project.finish_date|date:"Y-m-d" }} </b>
+            </td>
         </tr>
         </tbody>
     </table>
