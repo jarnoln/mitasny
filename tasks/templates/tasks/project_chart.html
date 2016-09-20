@@ -11,47 +11,46 @@
     </table>
 
 {% if project.tasks %}
-    <table class="table table-bordered table-condensed">
+    <table class="table table-condensed">
         <thead>
         <tr>
             {# <th style="width:0%"> # </th> #}
-            <th style="width:80%"> Task </th>
-            <th> Status </th>
-            <th colspan="1"> Work remaining </th>
-            <th colspan="2"> Est. finish date </th>
+            <th> Task </th>
+            <th colspan="1"> Days </th>
+            <th class="week_marker" colspan="5"> Week 38 </th>
+        {% for week in project.total_work_left_weeks_list %}
+            <th class="week_marker" colspan="5"> Week {{ week|add:39 }} </th>
+        {% endfor %}
+
         </tr>
         </thead>
         <tbody>
-    {% for task in project.tasks.all %}
+    {% for task in project.tasks_unfinished.all %}
         <tr>
-            {# <td> {{ task.order }} </td> #}
             <td> <a href="{{ task.get_absolute_url }}" title="{{ task.description }}"> {{ task.title }} </a> </td>
-            <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
-            {# <td class="text-right"> {{ task.cumulative_work_left }} </td> #}
-            <td class="text-right"> {{ task.finish_date|date:"m-d" }} </td>
-            <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
+            {% for i in task.cumulative_work_before_list %}
+            <td class="day_marker white"> &nbsp; </td>
+            {% endfor %}
+            {% for i in task.work_left_list %}
+            <td class="day_marker green"> &nbsp; </td>
+            {% endfor %}
+            <td colspan="2" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
         <tr>
             <th colspan="2"> Total: {{ project.total_work_left_string }}</th>
             <th class="text-right"> {{ project.total_work_left }} </th>
-            <th class="text-right"> {{ project.finish_date|date:"m-d" }} </th>
+            <th class="text-right" colspan="{{ project.total_work_left }}">
+                Estimated finish date: {{ project.finish_date|date:"Y-m-d" }}
+            </th>
+
             <th> &nbsp;</th>
         </tr>
-    {% if user.is_authenticated %}
-        <tr>
-            <td colspan="4"> <a class="btn btn-default" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td>
-        </tr>
-    {% endif %}
         </tbody>
     </table>
 {% endif %}
 
 <p> Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a> </p>
-
-{% if user.is_authenticated %}
-<p class="text-right"> <a class="btn btn-danger" href="{% url 'tasks:project_delete' project.name %}">Delete project</a> </p>
-{% endif %}
 
 {% endblock %}

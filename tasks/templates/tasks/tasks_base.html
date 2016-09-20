@@ -3,7 +3,32 @@
   <head>
     <meta charset="UTF-8">
     <title> {% block title %}Mitasny{% endblock %}</title>
+    <style>
+      td.day_marker {
+        border-style: solid;
+        border-width: 1px;
+        width: 25px;
+      }
+
+      td.white {
+      border-style: none;
+        border-color: white;
+      }
+
+      td.green {
+        border-color: white;
+        background-color:green;
+      }
+
+      th.week_marker {
+        text-align: center;
+        border-style: solid;
+        border-width: 0px 2px 0px 2px;
+        border-color: #aaaaaa;
+      }
+    </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
   </head>
   <body>
 

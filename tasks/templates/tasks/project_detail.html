@@ -41,7 +41,10 @@
         </tr>
     {% if user.is_authenticated %}
         <tr>
-            <td colspan="4"> <a class="btn btn-default" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td>
+            <td colspan="2"> <a class="btn btn-primary" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td>
+            <td colspan="3" class="text-right">
+                <a class="btn btn-default" href="{% url 'tasks:project_chart' project.name %}"> Chart </a>
+            </td>
         </tr>
     {% endif %}
         </tbody>
