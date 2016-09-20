@@ -205,11 +205,9 @@ class UpdateTaskTest(ExtTestCase):
         task = Task.objects.all()[0]
         self.assertEqual(task.title, 'Task updated')
         self.assertEqual(task.description, 'Updated')
-        self.assertTemplateUsed(response, 'tasks/task_detail.html')
-        self.assertEqual(response.context['task'].title, 'Task updated')
-        self.assertEqual(response.context['task'].description, 'Updated')
-        self.assertEqual(response.context['task'].work_left, 5)
-        self.assertEqual(response.context['task'].order, 9)
+        self.assertEqual(task.work_left, 5)
+        self.assertEqual(task.order, 9)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
 
     def test_can_update_phase(self):
         self.create_default_phases()
@@ -221,7 +219,7 @@ class UpdateTaskTest(ExtTestCase):
         response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
                                 {'title': 'Task updated', 'description': '', 'work_left': '5', 'order': '9', 'phase': phase.id},
                                 follow=True)
-        self.assertTemplateUsed(response, 'tasks/task_detail.html')
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
         self.assertEqual(Task.objects.all().count(), 1)
         task = Task.objects.first()
         self.assertEqual(task.title, 'Task updated')

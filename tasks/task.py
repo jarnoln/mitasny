@@ -85,6 +85,8 @@ class TaskUpdate(UpdateView):
         #logger.warning("Posting valid form")
         if self.object.can_edit(self.request.user):
             #logger.warning("Allowed to edit. Registered:%s Creator:%s" % (self.request.user.username, self.blog.created_by.username))
+            if self.project:
+                self.success_url = reverse('tasks:project', args=[self.project.name])
             return super(TaskUpdate, self).form_valid(form)
         else:
             logger.info("Not allowed to edit. Registered:%s Creator:%s" % (self.request.user.username, self.object.created_by.username))
