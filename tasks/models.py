@@ -38,7 +38,6 @@ class Project(models.Model):
         else:
             return '%d day(s)' % days
 
-
     @property
     def finish_date(self):
         days_left = self.total_work_left
@@ -48,8 +47,29 @@ class Project(models.Model):
     def can_edit(self, user):
         if user == self.created_by:
             return True
-
         return False
+
+    def tasks_by_phase(self, phase):
+        return Task.objects.filter(project=self, phase=phase).order_by('order')
+
+    def tasks_by_phase_name(self, phase_name):
+        phases = Phase.objects.filter(name=phase_name)
+        if phases.count() == 1:
+            phase = phases.first()
+            return self.tasks_by_phase(phase)
+        return Task.objects.none()
+
+    @property
+    def tasks_finished(self):
+        return self.tasks_by_phase_name('finished')
+
+    @property
+    def tasks_ongoing(self):
+        return self.tasks_by_phase_name('ongoing')
+
+    @property
+    def tasks_pending(self):
+        return self.tasks_by_phase_name('pending')
 
     def __unicode__(self):
         return self.name

@@ -1,10 +1,11 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
+from ext_test_case import ExtTestCase
 from tasks.models import Project, Priority, TaskStatus, Phase, Task
 
 
-class ProjectModelTest(TestCase):
+class ProjectModelTest(ExtTestCase):
     def test_can_save_and_load(self):
         creator = User.objects.create(username='creator')
         project = Project(name='test_project', created_by=creator)
@@ -55,6 +56,42 @@ class ProjectModelTest(TestCase):
         today = datetime.date.today()
         if today.weekday() < 5:  # Does not work on weekends
             self.assertEqual(project.finish_date, today)
+
+    def test_get_tasks_by_phase(self):
+        self.create_default_phases()
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        self.assertEqual(project.tasks_by_phase_name('finished').count(), 0)
+        self.assertEqual(project.tasks_by_phase_name('ongoing').count(), 0)
+        self.assertEqual(project.tasks_by_phase_name('pending').count(), 0)
+        self.assertEqual(project.tasks_finished.count(), 0)
+        self.assertEqual(project.tasks_ongoing.count(), 0)
+        self.assertEqual(project.tasks_pending.count(), 0)
+        self.assertEqual(project.tasks.count(), 0)
+        finished = Phase.objects.get(name='finished')
+        ongoing = Phase.objects.get(name='ongoing')
+        pending = Phase.objects.get(name='pending')
+        task_1 = Task.objects.create(project=project, name='task_1', work_left=0, created_by=creator, phase=finished)
+        self.assertEqual(project.tasks_finished.count(), 1)
+        self.assertEqual(project.tasks_ongoing.count(), 0)
+        self.assertEqual(project.tasks_pending.count(), 0)
+        self.assertEqual(project.tasks.count(), 1)
+        self.assertEqual(project.tasks_finished[0], task_1)
+        task_2 = Task.objects.create(project=project, name='task_2', work_left=1, created_by=creator, phase=ongoing)
+        self.assertEqual(project.tasks_finished.count(), 1)
+        self.assertEqual(project.tasks_ongoing.count(), 1)
+        self.assertEqual(project.tasks_pending.count(), 0)
+        self.assertEqual(project.tasks.count(), 2)
+        self.assertEqual(project.tasks_ongoing[0], task_2)
+        task_3 = Task.objects.create(project=project, name='task_3', work_left=1, created_by=creator, phase=pending)
+        self.assertEqual(project.tasks_finished.count(), 1)
+        self.assertEqual(project.tasks_ongoing.count(), 1)
+        self.assertEqual(project.tasks_pending.count(), 1)
+        self.assertEqual(project.tasks.count(), 3)
+        self.assertEqual(project.tasks_pending[0], task_3)
+        self.assertEqual(project.tasks_by_phase_name('finished').count(), 1)
+        self.assertEqual(project.tasks_by_phase_name('ongoing').count(), 1)
+        self.assertEqual(project.tasks_by_phase_name('pending').count(), 1)
 
 
 class PriorityModelTest(TestCase):
