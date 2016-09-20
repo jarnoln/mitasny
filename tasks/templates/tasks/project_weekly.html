@@ -54,6 +54,9 @@
         <tr>
             <td> {{ task.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
+            {% for i in task.work_left_list %}
+            <td> {{ i }} </td>
+            {% endfor %}
             <td class="text-right"> {{ task.finish_date|date:"Y-m-d" }} </td>
         </tr>
     {% endfor %}

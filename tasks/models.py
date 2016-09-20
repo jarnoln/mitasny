@@ -133,10 +133,7 @@ class Task(models.Model):
     @property
     def work_left_list(self):
         """ List with as many items as days of work left. For loopiing in templates """
-        if self.work_left <= 0:
-            return []
-        else:
-            return range(0, self.work_left)
+        return range(0, self.work_left)
 
     @property
     def cumulative_work_before(self):
@@ -148,6 +145,11 @@ class Task(models.Model):
         sum_dict = preceding_tasks.aggregate(models.Sum('work_left'))
         sum_value = sum_dict['work_left__sum']
         return sum_value
+
+    @property
+    def cumulative_work_before_list(self):
+        """ List with as many items as days of work left. For loopiing in templates """
+        return range(0, self.cumulative_work_before)
 
     @property
     def cumulative_work_left(self):
