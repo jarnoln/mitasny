@@ -70,7 +70,8 @@ class Phase(models.Model):
     element_class = models.CharField(default='', blank=True, max_length=250)  # CSS class to be used in HTML
 
     def __unicode__(self):
-        return '%d:%s:%s' % (self.order, self.name, self.title)
+        # return '%d:%s:%s' % (self.order, self.name, self.title)
+        return self.title
 
     class Meta:
         ordering = ['order', 'title']

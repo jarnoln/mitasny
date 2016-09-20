@@ -68,7 +68,8 @@ class PhaseModelTest(TestCase):
 
     def test_convert_to_string(self):
         phase = Phase.objects.create(name='ongoing', title='Ongoing', order=2)
-        self.assertEqual(str(phase), '2:ongoing:Ongoing')
+        # self.assertEqual(str(phase), '2:ongoing:Ongoing')
+        self.assertEqual(str(phase), 'Ongoing')
 
 
 class TaskModelTest(TestCase):
