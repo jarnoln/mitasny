@@ -66,7 +66,7 @@ class TaskCreate(CreateView):
 class TaskUpdate(UpdateView):
     model = models.Task
     slug_field = 'name'
-    fields = ['title', 'description', 'work_left', 'order']
+    fields = ['title', 'description', 'work_left', 'order', 'phase']
 
     def dispatch(self, request, *args, **kwargs):
         #logger = logging.getLogger(__name__)

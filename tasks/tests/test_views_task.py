@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
-from tasks.models import Project, Task
+from tasks.models import Project, Task, Phase
 from .ext_test_case import ExtTestCase
 
 
@@ -210,6 +210,22 @@ class UpdateTaskTest(ExtTestCase):
         self.assertEqual(response.context['task'].description, 'Updated')
         self.assertEqual(response.context['task'].work_left, 5)
         self.assertEqual(response.context['task'].order, 9)
+
+    def test_can_update_phase(self):
+        self.create_default_phases()
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project",
+                                         description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        phase = Phase.objects.get(name='ongoing')
+        response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
+                                {'title': 'Task updated', 'description': '', 'work_left': '5', 'order': '9', 'phase': phase.id},
+                                follow=True)
+        self.assertTemplateUsed(response, 'tasks/task_detail.html')
+        self.assertEqual(Task.objects.all().count(), 1)
+        task = Task.objects.first()
+        self.assertEqual(task.title, 'Task updated')
+        self.assertEqual(task.phase.name, 'ongoing')
 
 
 class DeleteTaskPageTest(ExtTestCase):
