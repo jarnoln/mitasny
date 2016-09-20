@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
+from tasks import models
 
 
 class ExtTestCase(TestCase):
@@ -10,3 +11,11 @@ class ExtTestCase(TestCase):
         user.save()
         self.client.post(reverse('login'), {'username': user.username, 'password': 'pw'})
         return user
+
+    def create_default_phases(self):
+        models.Phase.objects.create(name='pending', title='Pending', order=1)  # First of order is the initial phase
+        models.Phase.objects.create(name='ongoing', title='Ongoing', order=2)
+        models.Phase.objects.create(name='finished', title='Finished', order=3)
+        models.Phase.objects.create(name='done', title='Done', order=4)
+        models.Phase.objects.create(name='blocked', title='Blocked', order=5)
+        self.assertEqual(models.Phase.objects.all().count(), 5)
