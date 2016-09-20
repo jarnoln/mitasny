@@ -1,8 +1,8 @@
-{% extends "tasks/tasks_base.html" %}
+{% extends "tasks/tasks_static_base.html" %}
 {% block title %} Mitasny {% endblock %}
 {% block content %}
     <h1> {{ project.title }} </h1>
-    <table class="table table-bordered">
+    <table>
 {% if project.description %}
         <tr>
             <th> Description </th><td> {{ project.description }} </td>
@@ -11,11 +11,11 @@
     </table>
 
 {% if project.tasks %}
-    <table class="table table-bordered table-striped table-condensed">
+    <table>
         <thead>
         <tr>
             <th style="width:0%"> # </th>
-            <th style="width:80%"> Name </th>
+            <th style="width:50%"> Name </th>
             <th> Status </th>
             <th colspan="2"> Work remaining </th>
             <th colspan="2"> Est. finish date </th>
@@ -25,32 +25,22 @@
     {% for task in project.tasks.all %}
         <tr>
             <td> {{ task.order }} </td>
-            <td> <a href="{{ task.get_absolute_url }}"> {{ task.title }} </a> </td>
+            <td> {{ task.title }} </td>
             <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             <td class="text-right"> {{ task.cumulative_work_left }} </td>
             <td class="text-right"> {{ task.finish_date|date:"Y-m-d" }} </td>
-            <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a> </td>
         </tr>
     {% endfor %}
         <tr>
-            <th colspan="3"> Total: {{ project.total_work_left_string }}</th>
-            <th class="text-right"> {{ project.total_work_left }} </th>
-            <th> &nbsp;</th>
-            <th class="text-right"> {{ project.finish_date|date:"Y-m-d" }} </th>
-            <th> &nbsp;</th>
+            <td colspan="3"> <b> Total: {{ project.total_work_left_string }} </b> </td>
+            <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
+            <td> &nbsp;&nbsp;</td>
+            <td class="text-right"> <b> {{ project.finish_date|date:"Y-m-d" }} </b> </td>
+            <td> &nbsp;&nbsp;</td>
         </tr>
-    {% if user.is_authenticated %}
-        <tr>
-            <td colspan="4"> <a class="btn btn-default" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </td>
-        </tr>
-    {% endif %}
         </tbody>
     </table>
-{% endif %}
-
-{% if user.is_authenticated %}
-<p class="text-right"> <a class="btn btn-danger" href="{% url 'tasks:project_delete' project.name %}">Delete project</a> </p>
 {% endif %}
 
 {% endblock %}

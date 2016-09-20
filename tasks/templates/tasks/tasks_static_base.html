@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title> {% block title %}Mitasny{% endblock %}</title>
+    <style>
+        th {
+            text-align: left;
+        }
+        .text-right {
+            text-align: right;
+        }
+        td.success {
+            background-color: rgb(200,255,200);
+        }
+        td.warning {
+            background-color: rgb(255,255,200);
+        }
+
+    </style>
+  </head>
+  <body>
+{% block content %}
+{% endblock %}
+  </body>
+</html>
