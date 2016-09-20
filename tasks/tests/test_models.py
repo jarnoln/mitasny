@@ -34,6 +34,20 @@ class ProjectModelTest(TestCase):
         Task.objects.create(project=project, name='task_3', work_left=3, created_by=creator)
         self.assertEqual(project.total_work_left, 6)
 
+    def test_total_work_left_string(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        self.assertEqual(project.total_work_left_string, '0 day(s)')
+        Task.objects.create(project=project, name='task_1', work_left=1, created_by=creator)
+        self.assertEqual(project.total_work_left, 1)
+        self.assertEqual(project.total_work_left_string, '1 day(s)')
+        Task.objects.create(project=project, name='task_2', work_left=5, created_by=creator)
+        self.assertEqual(project.total_work_left, 6)
+        self.assertEqual(project.total_work_left_string, '1 week(s), 1 day(s)')
+        Task.objects.create(project=project, name='task_3', work_left=20, created_by=creator)
+        self.assertEqual(project.total_work_left, 26)
+        self.assertEqual(project.total_work_left_string, '1 month(s), 1 week(s), 1 day(s)')
+
     def test_finish_date(self):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', created_by=creator)

@@ -25,6 +25,21 @@ class Project(models.Model):
         return sum_dict['work_left__sum']
 
     @property
+    def total_work_left_string(self):
+        days = self.total_work_left
+        weeks = days / 5
+        days = days % 5
+        months = weeks / 4
+        weeks = weeks % 4
+        if months:
+            return '%d month(s), %d week(s), %d day(s)' % (months, weeks, days)
+        elif weeks:
+            return '%d week(s), %d day(s)' % (weeks, days)
+        else:
+            return '%d day(s)' % days
+
+
+    @property
     def finish_date(self):
         days_left = self.total_work_left
         start_date = datetime.date.today()
