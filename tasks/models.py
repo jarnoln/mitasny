@@ -53,12 +53,21 @@ class Priority(models.Model):
 
 
 class TaskStatus(models.Model):
-    # status: Blocked, Pending, Ongoing, Done
     name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
                             help_text=ugettext_lazy('Must be unique. Used in URLs.'))
     title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
+
+
+class Phase(models.Model):
+    # Blocked, Pending, Ongoing, (Recently)Finished, Done
+    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
+                            help_text=ugettext_lazy('Must be unique. Used in URLs.'))
+    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
+    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    order = models.PositiveSmallIntegerField(default=0)
+    element_class = models.CharField(default='', blank=True, max_length=250)  # CSS class to be used in HTML
 
 
 class Task(models.Model):
@@ -69,6 +78,7 @@ class Task(models.Model):
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
     priority = models.ForeignKey(Priority, null=True)
+    phase = models.ForeignKey(Phase, null=True, blank=True)
     status = models.ForeignKey(TaskStatus, null=True)
     owner = models.ForeignKey(User, null=True, related_name='tasks')
     work_done = models.PositiveSmallIntegerField(default=0)

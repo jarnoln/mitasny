@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
-from tasks.models import Project, Priority, TaskStatus, Task
+from tasks.models import Project, Priority, TaskStatus, Phase, Task
 
 
 class ProjectModelTest(TestCase):
@@ -52,6 +52,14 @@ class TaskStatusModelTest(TestCase):
         status.save()
         self.assertEqual(TaskStatus.objects.all().count(), 1)
         self.assertEqual(TaskStatus.objects.all()[0], status)
+
+
+class PhaseModelTest(TestCase):
+    def test_can_save_and_load(self):
+        phase = Phase(name='ongoing', title='Ongoing')
+        phase.save()
+        self.assertEqual(Phase.objects.all().count(), 1)
+        self.assertEqual(Phase.objects.all()[0], phase)
 
 
 class TaskModelTest(TestCase):
