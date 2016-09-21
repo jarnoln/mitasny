@@ -27,7 +27,11 @@
         <tbody>
     {% for task in project.tasks_unfinished.all %}
         <tr>
-            <td> <a href="{{ task.get_absolute_url }}" title="{{ task.description }}"> {{ task.title }} </a> </td>
+            <td class="nowrap">
+                <a href="{% url 'tasks:task_update' task.project.name task.name %}" title="{{ task.description }}">
+                    {{ task.title }}
+                </a>
+            </td>
             <td class="text-right"> {{ task.work_left }} </td>
             {% for i in task.cumulative_work_before_list %}
             <td class="day_marker white"> &nbsp; </td>
@@ -35,7 +39,7 @@
             {% for i in task.work_left_list %}
             <td class="day_marker green"> &nbsp; </td>
             {% endfor %}
-            <td colspan="2" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
+            <td class="nowrap" colspan="3" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
         <tr>

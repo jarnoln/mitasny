@@ -50,7 +50,7 @@
         <tbody>
     {% for task in project.tasks_unfinished.all %}
         <tr>
-            <td> {{ task.title }} </td>
+            <td class="nowrap"> {{ task.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             {% for i in task.cumulative_work_before_list %}
             <td class="day_marker white"> &nbsp; </td>
@@ -58,7 +58,7 @@
             {% for i in task.work_left_list %}
             <td class="day_marker green"> &nbsp; </td>
             {% endfor %}
-            <td colspan="2"> {{ task.finish_date|date:"m-d" }} </td>
+            <td class="nowrap" colspan="3"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
         <tr>
