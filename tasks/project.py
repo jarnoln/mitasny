@@ -47,6 +47,11 @@ class ProjectWeekly(DetailView):
     context_object_name = 'project'
     template_name = 'tasks/project_weekly.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ProjectWeekly, self).get_context_data(**kwargs)
+        context['chart'] = self.request.GET.get('chart', '1')
+        return context
+
 
 class ProjectCreate(CreateView):
     model = Project

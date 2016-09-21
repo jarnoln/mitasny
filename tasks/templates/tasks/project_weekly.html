@@ -34,8 +34,9 @@
 </ul>
 {% endif %}
 
+
+{% if project.tasks_unfinished and chart == '1' %}
 <b> Backlog </b>
-{% if project.tasks_unfinished %}
     <table>
         <thead>
         <tr>
