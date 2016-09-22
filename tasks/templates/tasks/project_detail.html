@@ -27,7 +27,7 @@
 
 {% if project.tasks %}
     {% if tab == 'table' %}
-        {% with tasks=project.tasks.all %}
+        {% with tasks=project.tasks_not_done %}
             {% include 'tasks/project/table.html' %}
         {% endwith %}
     {% elif tab == 'chart' %}

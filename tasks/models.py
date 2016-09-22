@@ -89,6 +89,11 @@ class Project(models.Model):
         done = Phase.objects.get(name='done')
         return Task.objects.filter(project=self).exclude(phase=finished).exclude(phase=done)
 
+    @property
+    def tasks_not_done(self):
+        done = Phase.objects.get(name='done')
+        return Task.objects.filter(project=self).exclude(phase=done)
+
     def __unicode__(self):
         return self.name
 
