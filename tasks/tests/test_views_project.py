@@ -50,6 +50,7 @@ class ProjectPageTest(TestCase):
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project', args=[project.name]))
         self.assertEqual(response.context['project'], project)
+        self.assertEqual(response.context['tab'], 'table')
         self.assertEqual(response.context['message'], '')
         self.assertEqual(response.context['can_edit'], False)
 
