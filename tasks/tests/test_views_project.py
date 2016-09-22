@@ -65,6 +65,9 @@ class ProjectPageTest(TestCase):
         response = self.client.get(reverse('tasks:project_tab', args=[project.name, 'chart']))
         self.assertEqual(response.context['tab'], 'chart')
         self.assertTemplateUsed(response, 'tasks/project/chart.html')
+        response = self.client.get(reverse('tasks:project_tab', args=[project.name, 'archive']))
+        self.assertEqual(response.context['tab'], 'archive')
+        self.assertTemplateUsed(response, 'tasks/project/archive.html')
 
     def test_404_not_found(self):
         response = self.client.get(reverse('tasks:project', args=['missing_project']))

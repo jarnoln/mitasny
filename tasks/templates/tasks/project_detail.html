@@ -20,7 +20,9 @@
     <li role="presentation" class="{% if tab == 'chart' %}active{% endif %}">
         <a href="{% url 'tasks:project_tab' project.name 'chart' %}"> Chart </a>
     </li>
-
+    <li role="presentation" class="{% if tab == 'archive' %}active{% endif %}">
+        <a href="{% url 'tasks:project_tab' project.name 'archive' %}"> Archive </a>
+    </li>
 </ul>
 
 {% if project.tasks %}
@@ -30,6 +32,8 @@
         {% endwith %}
     {% elif tab == 'chart' %}
         {% include 'tasks/project/chart.html' %}
+    {% elif tab == 'archive' %}
+        {% include 'tasks/project/archive.html' %}
     {% endif %}
 {% endif %}
 
