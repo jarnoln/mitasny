@@ -1,5 +1,5 @@
 {% extends "tasks/tasks_static_base.html" %}
-{% block title %} Mitasny {% endblock %}
+{% block title %} {{ project.title }} {% endblock %}
 {% block content %}
     <h1> {{ project.title }} </h1>
     <table>
@@ -42,9 +42,9 @@
         <tr>
             <th> Task </th>
             <th colspan="1"> Days </th>
-            <th class="week_marker" colspan="5"> Week 38 </th>
+            <th class="week-marker" colspan="5"> Week 38 </th>
         {% for week in project.total_work_left_weeks_list %}
-            <th class="week_marker" colspan="5"> Week {{ week|add:39 }} </th>
+            <th class="week-marker" colspan="5"> Week {{ week|add:39 }} </th>
         {% endfor %}
         </tr>
         </thead>
@@ -54,14 +54,25 @@
             <td class="nowrap"> {{ task.title }} </td>
             <td class="text-right"> {{ task.work_left }} </td>
             {% for i in task.cumulative_work_before_list %}
-            <td class="day_marker white"> &nbsp; </td>
+            <td class="day-marker white"> &nbsp; </td>
             {% endfor %}
             {% for i in task.work_left_list %}
-            <td class="day_marker green"> &nbsp; </td>
+            <td class="day-marker green"> &nbsp; </td>
             {% endfor %}
             <td class="nowrap" colspan="3"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
+        <tr>
+            <th colspan="2"> &nbsp; </th>
+        {% for day in project.total_work_left_list %}
+            <th class="text-right {% if day.weekday == 0 %}week-start{% endif %}">
+                {{ day.day }} <br />
+                {{ day.month }}
+            </th>
+        {% endfor %}
+            <th> &nbsp; </th>
+        </tr>
+
         <tr>
             <td colspan="1"> <b> Total </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>

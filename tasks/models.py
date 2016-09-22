@@ -26,7 +26,22 @@ class Project(models.Model):
 
     @property
     def total_work_left_list(self):
-        return range(0, self.total_work_left)
+        day_list = []
+        total_work = self.total_work_left
+        if total_work == 0:
+            return day_list
+
+        day = datetime.date.today()
+        one_day = datetime.timedelta(days=1)
+        for i in range(0, self.total_work_left):
+            day_list.append(day)
+            day += one_day
+            if day.weekday() == 5:
+                day += one_day
+            if day.weekday() == 6:
+                day += one_day
+
+        return day_list
 
     @property
     def total_work_left_weeks_list(self):

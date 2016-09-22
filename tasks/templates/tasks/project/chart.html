@@ -4,11 +4,6 @@
             {# <th style="width:0%"> # </th> #}
             <th> Task </th>
             <th colspan="1"> Days </th>
-            <th class="week_marker" colspan="5"> Week 38 </th>
-        {% for week in project.total_work_left_weeks_list %}
-            <th class="week_marker" colspan="5"> Week {{ week|add:39 }} </th>
-        {% endfor %}
-
         </tr>
         </thead>
         <tbody>
@@ -21,23 +16,33 @@
             </td>
             <td class="text-right"> {{ task.work_left }} </td>
             {% for i in task.cumulative_work_before_list %}
-            <td class="day_marker white"> &nbsp; </td>
+            <td class="day-marker white"> &nbsp; </td>
             {% endfor %}
             {% for i in task.work_left_list %}
-            <td class="day_marker green"> &nbsp; </td>
+            <td class="day-marker green"> &nbsp; </td>
             {% endfor %}
-            <td class="nowrap" colspan="3" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
+            <td class="nowrap" colspan="2" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
     {% endfor %}
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="2"> &nbsp; </th>
+        {% for day in project.total_work_left_list %}
+            <th class="text-right {% if day.weekday == 0 %}week-start{% endif %}">
+                {{ day.day }} <br />
+                {{ day.month }}
+            </th>
+        {% endfor %}
+            <th> &nbsp; </th>
+        </tr>
         <tr>
             <th colspan="2"> Total: {{ project.total_work_left_string }}</th>
             <th class="text-right"> {{ project.total_work_left }} </th>
             <th class="text-right" colspan="{{ project.total_work_left }}">
                 Estimated finish date: {{ project.finish_date|date:"Y-m-d" }}
             </th>
-
-            <th> &nbsp;</th>
         </tr>
-        </tbody>
+    </tfoot>
     </table>
 <br />
