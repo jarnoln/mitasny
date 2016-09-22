@@ -81,10 +81,9 @@ class Project(models.Model):
 
     @property
     def tasks_unfinished(self):
-        phases = Phase.objects.filter(name='finished')
-        if phases.count() == 1:
-            phase = phases.first()
-            return Task.objects.filter(project=self).exclude(phase=phase)
+        finished = Phase.objects.get(name='finished')
+        done = Phase.objects.get(name='done')
+        return Task.objects.filter(project=self).exclude(phase=finished).exclude(phase=done)
         return Task.objects.none()
 
     def __unicode__(self):

@@ -69,6 +69,7 @@ class ProjectModelTest(ExtTestCase):
         self.assertEqual(project.tasks_pending.count(), 0)
         self.assertEqual(project.tasks_unfinished.count(), 0)
         self.assertEqual(project.tasks.count(), 0)
+        done = Phase.objects.get(name='done')
         finished = Phase.objects.get(name='finished')
         ongoing = Phase.objects.get(name='ongoing')
         pending = Phase.objects.get(name='pending')
@@ -93,9 +94,16 @@ class ProjectModelTest(ExtTestCase):
         self.assertEqual(project.tasks_unfinished.count(), 2)
         self.assertEqual(project.tasks.count(), 3)
         self.assertEqual(project.tasks_pending[0], task_3)
+        task_3 = Task.objects.create(project=project, name='task_4', work_left=1, created_by=creator, phase=done)
+        self.assertEqual(project.tasks_finished.count(), 1)
+        self.assertEqual(project.tasks_ongoing.count(), 1)
+        self.assertEqual(project.tasks_pending.count(), 1)
+        self.assertEqual(project.tasks_unfinished.count(), 2)
+        self.assertEqual(project.tasks.count(), 4)
         self.assertEqual(project.tasks_by_phase_name('finished').count(), 1)
         self.assertEqual(project.tasks_by_phase_name('ongoing').count(), 1)
         self.assertEqual(project.tasks_by_phase_name('pending').count(), 1)
+        self.assertEqual(project.tasks_by_phase_name('done').count(), 1)
 
 
 class PriorityModelTest(TestCase):
