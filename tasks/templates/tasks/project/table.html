@@ -1,0 +1,30 @@
+    <table class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            {# <th style="width:0%"> # </th> #}
+            <th style="width:80%"> Task </th>
+            <th> Status </th>
+            <th colspan="1"> Work remaining </th>
+            <th colspan="1"> Est. finish date </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+        <tr>
+            {# <td> {{ task.order }} </td> #}
+            <td> <a href="{% url 'tasks:task_update' task.project.name task.name %}" title="{{ task.description }}"> {{ task.title }} </a> </td>
+            <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
+            <td class="text-right"> {{ task.work_left }} </td>
+            {# <td class="text-right"> {{ task.cumulative_work_left }} </td> #}
+            <td class="text-right nowrap"> {{ task.finish_date|date:"m-d" }} </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+        <thead>
+        <tr>
+            <th colspan="2"> Total: {{ project.total_work_left_string }}</th>
+            <th class="text-right"> {{ project.total_work_left }} </th>
+            <th class="text-right"> {{ project.finish_date|date:"m-d" }} </th>
+        </tr>
+        </thead>
+    </table>
