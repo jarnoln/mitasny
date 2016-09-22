@@ -23,6 +23,7 @@ class ProjectDetail(DetailView):
         context = super(ProjectDetail, self).get_context_data(**kwargs)
         context['message'] = self.request.GET.get('message', '')
         context['can_edit'] = self.object.can_edit(self.request.user)
+        context['tab'] = self.kwargs.get('tab', '')
         return context
 
 

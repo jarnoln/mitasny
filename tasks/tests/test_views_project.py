@@ -31,6 +31,8 @@ class ProjectListTest(TestCase):
 class ProjectPageTest(TestCase):
     def test_reverse(self):
         self.assertEqual(reverse('tasks:project', args=['test_project']), '/project/test_project/')
+        self.assertEqual(reverse('tasks:project_tab', args=['test_project', 'table']),
+                         '/project/test_project/tab/table/')
 
     def test_uses_correct_template(self):
         creator = User.objects.create(username='creator')
@@ -51,6 +53,13 @@ class ProjectPageTest(TestCase):
         # self.assertEqual(response.context['blog'].articles().count(), 0)
         # self.assertEqual(response.context['message'], '')
         # self.assertEqual(response.context['can_edit'], True)
+
+    def test_tab_context(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
+        response = self.client.get(reverse('tasks:project_tab', args=[project.name, 'table']))
+        self.assertEqual(response.context['project'], project)
+        self.assertEqual(response.context['tab'], 'table')
 
     def test_404_not_found(self):
         response = self.client.get(reverse('tasks:project', args=['missing_project']))

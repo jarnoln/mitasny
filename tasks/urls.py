@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/update/$', TaskUpdate.as_view(), name='task_update'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/delete/$', TaskDelete.as_view(), name='task_delete'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/$', TaskDetail.as_view(), name='task'),
+    url(r'^project/(?P<slug>[\w\.-]+)/tab/(?P<tab>[\w\.-]+)/$', ProjectDetail.as_view(), name='project_tab'),
     url(r'^project/(?P<slug>[\w\.-]+)/weekly_report.html$', ProjectWeekly.as_view(), name='project_weekly'),
     url(r'^project/(?P<slug>[\w\.-]+)/chart/$', ProjectChart.as_view(), name='project_chart'),
     url(r'^project/(?P<slug>[\w\.-]+)/delete/$', login_required(ProjectDelete.as_view()), name='project_delete'),
