@@ -124,6 +124,18 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(Task.objects.all().count(), 3)
         self.assertEqual(Task.objects.last().order, 2)
 
+    def test_order_is_higher_than_previous_highest_order_task(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project")
+        task = Task.objects.create(project=project, created_by=creator, name="test-task", order=1336)
+        response = self.client.post(reverse('tasks:task_create', args=[project.name]),
+                                    {'title': 'Test task 1',
+                                     'description': '',
+                                     'work_left': '1'}, follow=True)
+        self.assertEqual(Task.objects.all().count(), 2)
+        self.assertEqual(Task.objects.all()[0].order, 1336)
+        self.assertEqual(Task.objects.all()[1].order, 1337)
+
     def test_initial_phase_set_to_pending(self):
         self.create_default_phases()
         creator = self.create_and_log_in_user()

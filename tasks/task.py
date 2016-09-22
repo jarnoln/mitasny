@@ -44,11 +44,17 @@ class TaskCreate(CreateView):
         form.instance.name = slugify(form.instance.title)
         form.instance.project = self.project
         form.instance.created_by = self.request.user
-        form.instance.order = self.project.tasks.count()
         if models.Task.objects.filter(project=self.project, name=form.instance.name).exists():
             logger = logging.getLogger(__name__)
             logger.warning("Task already exists: project=%s name=%s" % (self.project.name, form.instance.name))
             return super(TaskCreate, self).form_invalid(form)
+
+        tasks = self.project.tasks.order_by('-order')
+        if tasks.count() > 0:
+            highest_order_task = tasks.first()
+            form.instance.order = highest_order_task.order + 1
+        else:
+            form.instance.order = 0
 
         phases = models.Phase.objects.all().order_by('order')
         if phases.count() > 0:
