@@ -1,6 +1,9 @@
 {% extends "tasks/tasks_base.html" %}
 {% block title %} Mitasny {% endblock %}
 {% block content %}
+<div class="text-right">
+    Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
+</div>
     <h1> {{ project.title }} </h1>
     <table class="table table-bordered">
 {% if project.description %}
@@ -30,12 +33,8 @@
     {% endif %}
 {% endif %}
 
-<p> Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
-<a class="btn btn-default" href="{% url 'tasks:project_chart' project.name %}"> Chart </a></p>
-
 {% if user.is_authenticated %}
 <div> <a class="btn btn-primary" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </div>
-<div class="text-right"> <a class="btn btn-danger" href="{% url 'tasks:project_delete' project.name %}">Delete project</a> </div>
 {% endif %}
 
 {% endblock %}

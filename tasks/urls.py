@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
-from .project import ProjectList, ProjectDetail, ProjectChart, ProjectWeekly, ProjectCreate, ProjectDelete
+from .project import ProjectList, ProjectDetail, ProjectWeekly, ProjectCreate, ProjectDelete
 from .task import TaskList, TaskDetail, TaskCreate, TaskUpdate, TaskDelete
 
 
@@ -13,7 +13,6 @@ urlpatterns = [
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/$', TaskDetail.as_view(), name='task'),
     url(r'^project/(?P<slug>[\w\.-]+)/tab/(?P<tab>[\w\.-]+)/$', ProjectDetail.as_view(), name='project_tab'),
     url(r'^project/(?P<slug>[\w\.-]+)/weekly_report.html$', ProjectWeekly.as_view(), name='project_weekly'),
-    url(r'^project/(?P<slug>[\w\.-]+)/chart/$', ProjectChart.as_view(), name='project_chart'),
     url(r'^project/(?P<slug>[\w\.-]+)/delete/$', login_required(ProjectDelete.as_view()), name='project_delete'),
     url(r'^project/(?P<slug>[\w\.-]+)/$', ProjectDetail.as_view(), name='project'),
     url(r'^projects/$', ProjectList.as_view(), name='projects'),

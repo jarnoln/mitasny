@@ -27,20 +27,6 @@ class ProjectDetail(DetailView):
         return context
 
 
-class ProjectChart(DetailView):
-    model = Project
-    slug_field = 'name'
-    fields = ['name', 'title', 'description']
-    context_object_name = 'project'
-    template_name = 'tasks/project_chart.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ProjectChart, self).get_context_data(**kwargs)
-        context['message'] = self.request.GET.get('message', '')
-        context['can_edit'] = self.object.can_edit(self.request.user)
-        return context
-
-
 class ProjectWeekly(DetailView):
     model = Project
     slug_field = 'name'
