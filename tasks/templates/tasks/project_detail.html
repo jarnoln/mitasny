@@ -10,10 +10,24 @@
 {% endif %}
     </table>
 
+<ul class="nav nav-tabs">
+    <li role="presentation" class="{% if tab == 'table' %}active{% endif %}">
+        <a href="{% url 'tasks:project_tab' project.name 'table' %}"> Table </a>
+    </li>
+    <li role="presentation" class="{% if tab == 'chart' %}active{% endif %}">
+        <a href="{% url 'tasks:project_tab' project.name 'chart' %}"> Chart </a>
+    </li>
+
+</ul>
+
 {% if project.tasks %}
-    {% with tasks=project.tasks.all %}
-        {% include 'tasks/project/table.html' %}
-    {% endwith %}
+    {% if tab == 'table' %}
+        {% with tasks=project.tasks.all %}
+            {% include 'tasks/project/table.html' %}
+        {% endwith %}
+    {% elif tab == 'chart' %}
+        {% include 'tasks/project/chart.html' %}
+    {% endif %}
 {% endif %}
 
 <p> Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>

@@ -50,16 +50,20 @@ class ProjectPageTest(TestCase):
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project', args=[project.name]))
         self.assertEqual(response.context['project'], project)
-        # self.assertEqual(response.context['blog'].articles().count(), 0)
-        # self.assertEqual(response.context['message'], '')
-        # self.assertEqual(response.context['can_edit'], True)
+        self.assertEqual(response.context['message'], '')
+        self.assertEqual(response.context['can_edit'], False)
 
-    def test_tab_context(self):
+    def test_tab(self):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project_tab', args=[project.name, 'table']))
         self.assertEqual(response.context['project'], project)
         self.assertEqual(response.context['tab'], 'table')
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        self.assertTemplateUsed(response, 'tasks/project/table.html')
+        response = self.client.get(reverse('tasks:project_tab', args=[project.name, 'chart']))
+        self.assertEqual(response.context['tab'], 'chart')
+        self.assertTemplateUsed(response, 'tasks/project/chart.html')
 
     def test_404_not_found(self):
         response = self.client.get(reverse('tasks:project', args=['missing_project']))
