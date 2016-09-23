@@ -206,6 +206,23 @@ class Task(models.Model):
         days_left = self.cumulative_work_left
         start_date = datetime.date.today()
         return calculate_finish_date(start_date, days_left)
+
+    @property
+    def next(self):
+        following_tasks = Task.objects.filter(project=self.project, order__gt=self.order).order_by('order')
+        if following_tasks.count() == 0:
+            return None
+        else:
+            return following_tasks.first()
+
+    @property
+    def prev(self):
+        preceding_tasks = Task.objects.filter(project=self.project, order__lt=self.order).order_by('-order')
+        if preceding_tasks.count() == 0:
+            return None
+        else:
+            return preceding_tasks.first()
+
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
             return True
