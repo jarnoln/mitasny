@@ -235,6 +235,29 @@ class Task(models.Model):
             self.phase = phases.first()
             self.save()
 
+    def switch_with(self, task):
+        old_order = self.order
+        self.order = task.order
+        task.order = old_order
+        task.save()
+        self.save()
+
+    def move_up(self):
+        prev_task = self.prev
+        if not prev_task:
+            return False
+
+        self.switch_with(prev_task)
+        return True
+
+    def move_down(self):
+        next_task = self.next
+        if not next_task:
+            return False
+
+        self.switch_with(next_task)
+        return True
+
     def __unicode__(self):
         return '%s:%s' % (self.project.name, self.name)
 
