@@ -125,6 +125,7 @@ class ProjectModelTest(ExtTestCase):
         task_1 = Task.objects.create(project=project, name='impediment', work_left=0, created_by=creator, phase=impediment)
         self.assertEqual(project.tasks_by_phase_name('impediment').count(), 1)
         self.assertEqual(project.impediments.count(), 1)
+        self.assertEqual(project.tasks_unfinished.count(), 0)
 
 
 class PriorityModelTest(TestCase):

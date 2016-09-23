@@ -104,9 +104,12 @@ class Project(models.Model):
 
     @property
     def tasks_unfinished(self):
-        finished = Phase.objects.get(name='finished')
-        done = Phase.objects.get(name='done')
-        return Task.objects.filter(project=self).exclude(phase=finished).exclude(phase=done)
+        excluded_phases = ['finished', 'done', 'impediment']
+        tasks = Task.objects.filter(project=self)
+        for phase_name in excluded_phases:
+            tasks = tasks.exclude(phase__name=phase_name)
+
+        return tasks
 
     @property
     def tasks_not_done(self):
