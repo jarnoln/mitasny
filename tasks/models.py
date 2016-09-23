@@ -99,6 +99,10 @@ class Project(models.Model):
         return self.tasks_by_phase_name('pending')
 
     @property
+    def impediments(self):
+        return self.tasks_by_phase_name('impediment')
+
+    @property
     def tasks_unfinished(self):
         finished = Phase.objects.get(name='finished')
         done = Phase.objects.get(name='done')

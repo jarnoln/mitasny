@@ -18,4 +18,5 @@ class ExtTestCase(TestCase):
         models.Phase.objects.create(name='finished', title='Finished', order=3)
         models.Phase.objects.create(name='done', title='Done', order=4)
         models.Phase.objects.create(name='blocked', title='Blocked', order=5)
-        self.assertEqual(models.Phase.objects.all().count(), 5)
+        models.Phase.objects.create(name='impediment', title='Impediment', order=6)
+        self.assertEqual(models.Phase.objects.all().count(), 6)

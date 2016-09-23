@@ -79,6 +79,7 @@ class ProjectModelTest(ExtTestCase):
         self.assertEqual(project.tasks_finished.count(), 1)
         self.assertEqual(project.tasks_ongoing.count(), 0)
         self.assertEqual(project.tasks_pending.count(), 0)
+        self.assertEqual(project.impediments.count(), 0)
         self.assertEqual(project.tasks_unfinished.count(), 0)
         self.assertEqual(project.tasks_not_done.count(), 1)
         self.assertEqual(project.tasks.count(), 1)
@@ -113,6 +114,17 @@ class ProjectModelTest(ExtTestCase):
         self.assertEqual(project.tasks_by_phase_name('ongoing').count(), 1)
         self.assertEqual(project.tasks_by_phase_name('pending').count(), 1)
         self.assertEqual(project.tasks_by_phase_name('done').count(), 1)
+
+    def test_get_impediments(self):
+        self.create_default_phases()
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        self.assertEqual(project.tasks_by_phase_name('impediment').count(), 0)
+        self.assertEqual(project.impediments.count(), 0)
+        impediment = Phase.objects.get(name='impediment')
+        task_1 = Task.objects.create(project=project, name='impediment', work_left=0, created_by=creator, phase=impediment)
+        self.assertEqual(project.tasks_by_phase_name('impediment').count(), 1)
+        self.assertEqual(project.impediments.count(), 1)
 
 
 class PriorityModelTest(TestCase):
