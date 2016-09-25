@@ -245,6 +245,34 @@ class MoveTaskTest(ExtTestCase):
         self.assertEqual(reverse('tasks:task_move', args=['test_project', 'test_task', 'up']),
                          '/project/test_project/task/test_task/move/up/')
 
+    def test_move_task_up(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task_1 = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+        task_2 = Task.objects.create(project=project, created_by=creator, name="task_2", order=2)
+        self.assertEqual(task_1.next, task_2)
+        response = self.client.get(reverse('tasks:task_move', args=[project.name, task_2.name, 'up']), follow=True)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        task_1 = Task.objects.get(project=project, name="task_1")
+        task_2 = Task.objects.get(project=project, name="task_2")
+        self.assertEqual(task_1.order, 2)
+        self.assertEqual(task_2.order, 1)
+        self.assertEqual(task_2.next, task_1)
+
+    def test_move_task_down(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task_1 = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+        task_2 = Task.objects.create(project=project, created_by=creator, name="task_2", order=2)
+        self.assertEqual(task_1.next, task_2)
+        response = self.client.get(reverse('tasks:task_move', args=[project.name, task_1.name, 'down']), follow=True)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        task_1 = Task.objects.get(project=project, name="task_1")
+        task_2 = Task.objects.get(project=project, name="task_2")
+        self.assertEqual(task_1.order, 2)
+        self.assertEqual(task_2.order, 1)
+        self.assertEqual(task_2.next, task_1)
+
 
 class DeleteTaskPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):

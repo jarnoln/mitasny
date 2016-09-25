@@ -110,7 +110,15 @@ class TaskUpdate(UpdateView):
 
 class TaskMove(View):
     def get(self, request, *args, **kwargs):
-        return HttpResponse('Tadaa!')
+        project = get_object_or_404(models.Project, name=kwargs['project_name'])
+        task = get_object_or_404(models.Task, name=kwargs['slug'])
+        direction = kwargs.get('dir', '')
+        if direction == 'up':
+            result = task.move_up()
+            # return HttpResponse('Moving up: %s' % str(result))
+        elif direction == 'down':
+            task.move_down()
+        return HttpResponseRedirect(project.get_absolute_url())
 
 
 class TaskDelete(DeleteView):
