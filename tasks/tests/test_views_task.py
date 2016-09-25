@@ -240,6 +240,12 @@ class UpdateTaskTest(ExtTestCase):
         self.assertEqual(task.phase.name, 'ongoing')
 
 
+class MoveTaskTest(ExtTestCase):
+    def test_reverse_task_edit(self):
+        self.assertEqual(reverse('tasks:task_move', args=['test_project', 'test_task', 'up']),
+                         '/project/test_project/task/test_task/move/up/')
+
+
 class DeleteTaskPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
         self.assertEqual(reverse('tasks:task_delete', args=['test_project', 'test_task']),

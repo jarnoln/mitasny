@@ -7,7 +7,8 @@ class CalculateFinishDateTest(TestCase):
     def test_add_zero(self):
         start_date = datetime.date.today()
         finish_date = calculate_finish_date(start_date, 0)
-        self.assertEqual(start_date, finish_date)
+        if start_date.weekday() < 5:
+            self.assertEqual(start_date, finish_date)
 
     def test_add_one(self):
         start_date = datetime.date(2016, 9, 19)
@@ -24,7 +25,8 @@ class CalculateFinishDateTest(TestCase):
     def test_add_five_ends_up_with_same_weekday(self):
         start_date = datetime.date.today()
         finish_date = calculate_finish_date(start_date, 5)
-        self.assertEqual(start_date.weekday(), finish_date.weekday())
+        if start_date.weekday() < 5:
+            self.assertEqual(start_date.weekday(), finish_date.weekday())
 
     def test_can_handle_month_change(self):
         start_date = datetime.date(2016, 9, 30)  # Last day of month (Friday)

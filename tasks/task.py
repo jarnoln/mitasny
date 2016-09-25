@@ -1,7 +1,7 @@
 import logging
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404
-from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.text import slugify
@@ -106,6 +106,11 @@ class TaskUpdate(UpdateView):
         context['project'] = self.object.project
         context['message'] = self.request.GET.get('message', '')
         return context
+
+
+class TaskMove(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Tadaa!')
 
 
 class TaskDelete(DeleteView):
