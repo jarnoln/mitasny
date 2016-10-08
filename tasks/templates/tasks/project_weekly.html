@@ -53,10 +53,14 @@
         <tr>
             <th> Task </th>
             <th colspan="1"> Days </th>
+    {% if True %}
+            <th colspan="{{ project.total_work_left }}"> &nbsp; </th>
+    {% else %}
             <th class="week-marker" colspan="5"> Week 38 </th>
         {% for week in project.total_work_left_weeks_list %}
             <th class="week-marker" colspan="5"> Week {{ week|add:39 }} </th>
         {% endfor %}
+    {% endif %}
         </tr>
         </thead>
         <tbody>
