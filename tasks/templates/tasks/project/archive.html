@@ -12,6 +12,9 @@
             <td> {{ task.order }} </td>
             <td> <a href="{% url 'tasks:task_update' task.project.name task.name %}" title="{{ task.description }}"> {{ task.title }} </a> </td>
             <td class="{{ task.phase.element_class }}"> {{ task.phase.title }} </td>
+            {% if task.work_left %}
+            <td class="danger"> Task has remaining work: {{ task.work_left }} </td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>

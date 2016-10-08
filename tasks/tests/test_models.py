@@ -230,6 +230,19 @@ class TaskModelTest(TestCase):
         task.set_phase('ongoing')
         self.assertEqual(task.phase, phase)
 
+    def test_warnings(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        ongoing = Phase.objects.create(name='ongoing', title='Ongoing')
+        finished = Phase.objects.create(name='finished', title='Finished')
+        done = Phase.objects.create(name='done', title='Done')
+        task = Task.objects.create(project=project, order=1, name='task_1', work_left=1, created_by=creator, phase=ongoing)
+        self.assertEqual(task.warnings, '')
+        task.set_phase('finished')
+        self.assertEqual(task.warnings, 'Task has remaining work: 1')
+        task.set_phase('done')
+        self.assertEqual(task.warnings, 'Task has remaining work: 1')
+
     def test_next_and_previous(self):
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', created_by=creator)

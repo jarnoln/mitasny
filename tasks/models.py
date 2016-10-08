@@ -223,6 +223,14 @@ class Task(models.Model):
         else:
             return preceding_tasks.first()
 
+    @property
+    def warnings(self):
+        if self.phase:
+            if self.phase.name == 'finished' or self.phase.name == 'done':
+                if self.work_left > 0:
+                    return "Task has remaining work: %d" % self.work_left
+        return ''
+
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
             return True

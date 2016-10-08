@@ -24,6 +24,9 @@
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_move' task.project.name task.name 'up' %}"> &uarr; </a> </td>
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_move' task.project.name task.name 'down' %}"> &darr; </a> </td>
             {% endif %}
+            {% if task.warnings %}
+            <td class="danger"> {{ task.warnings }} </td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>
