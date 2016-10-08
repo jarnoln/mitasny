@@ -27,6 +27,10 @@ class ProjectListTest(TestCase):
         response = self.client.get(reverse('tasks:projects'))
         self.assertEqual(response.context['project_list'].count(), 2)
 
+    def test_messages(self):
+        response = self.client.get(reverse('tasks:projects'))
+        self.assertEqual(len(response.context['messages']), 6)
+
 
 class ProjectPageTest(TestCase):
     def test_reverse(self):
