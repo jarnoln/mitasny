@@ -9,6 +9,8 @@ install:
 
 before_script:
   - python mitasny/generate_secret.py > mitasny/secret_key.py
+  - python manage.py makemigrations
+  - python manage.py migrate
 
 script:
   - coverage run --source='./tasks' manage.py test tasks
