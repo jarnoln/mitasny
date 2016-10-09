@@ -7,5 +7,8 @@ dist: trusty
 install:
   - pip install -r requirements.txt
 
+before_script:
+  - python mitasny/generate_secret.py > secret_key.py
+
 script:
   - coverage run --source='./tasks' manage.py test tasks
