@@ -9,6 +9,7 @@ install:
 
 before_script:
   - python mitasny/generate_secret.py > mitasny/secret_key.py
+  - mkdir ../db
   - python manage.py makemigrations
   - python manage.py migrate
 
