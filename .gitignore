@@ -2,6 +2,7 @@ secret_key.py
 migrations
 db.sqlite3
 .idea
+.coverage
 *.pyc
 __pycache__
 *~
