@@ -5,7 +5,7 @@ from tasks.models import Project, Task
 from .ext_test_case import ExtTestCase
 
 
-class ProjectListTest(TestCase):
+class ProjectListTest(ExtTestCase):
     def test_reverse(self):
         self.assertEqual(reverse('tasks:projects'), '/projects/')
 
@@ -29,7 +29,10 @@ class ProjectListTest(TestCase):
 
     def test_messages(self):
         response = self.client.get(reverse('tasks:projects'))
-        self.assertEqual(len(response.context['messages']), 6)
+        self.assertEqual(len(response.context['messages']), 7)
+        self.create_default_phases()
+        response = self.client.get(reverse('tasks:projects'))
+        self.assertEqual(len(response.context['messages']), 0)
 
 
 class ProjectPageTest(TestCase):

@@ -95,6 +95,10 @@ class Project(models.Model):
         return self.tasks_by_phase_name('ongoing')
 
     @property
+    def tasks_continuing(self):
+        return self.tasks_by_phase_name('continuing')
+
+    @property
     def tasks_pending(self):
         return self.tasks_by_phase_name('pending')
 

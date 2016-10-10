@@ -11,7 +11,7 @@ def check_phase(name):
 
 def check_validity():
     invalidities = []
-    phase_names = ['pending', 'ongoing', 'finished', 'done', 'blocked', 'impediment']
+    phase_names = ['pending', 'ongoing', 'continuing', 'finished', 'done', 'blocked', 'impediment']
     for phase_name in phase_names:
         msg = check_phase(phase_name)
         if msg:
