@@ -15,3 +15,6 @@ before_script:
 
 script:
   - coverage run --source='./tasks' manage.py test tasks
+
+after_success:
+  - codecov
