@@ -10,10 +10,10 @@
 {% endif %}
     </table>
 
-{% if project.tasks_finished %}
+{% if project.tasks_last_week %}
 <b> Last week </b>
 <ul>
-    {% for task in project.tasks_finished.all %}
+    {% for task in project.tasks_last_week.all %}
     <li> {{ task.title }} </li>
         {% if task.description %}
         <ul> <li> {{ task.description }} </li></ul>
@@ -22,11 +22,11 @@
 </ul>
 {% endif %}
 
-{% if project.tasks_ongoing %}
+{% if project.tasks_this_week %}
 <b> This week </b>
 <ul>
-    {% for task in project.tasks_ongoing.all %}
-    <li> {{ task.title }} </li>
+    {% for task in project.tasks_this_week.all %}
+    <li> {{ task.title }} {% if task.phase.name == 'continuing' %}(Continuing){% endif %}</li>
         {% if task.description %}
         <ul> <li> {{ task.description }} </li></ul>
         {% endif %}

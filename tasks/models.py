@@ -120,6 +120,24 @@ class Project(models.Model):
         done = Phase.objects.get(name='done')
         return Task.objects.filter(project=self).exclude(phase=done)
 
+    @property
+    def tasks_last_week(self):
+        excluded_phases = ['done', 'impediment', 'ongoing', 'pending']
+        tasks = Task.objects.filter(project=self)
+        for phase_name in excluded_phases:
+            tasks = tasks.exclude(phase__name=phase_name)
+
+        return tasks
+
+    @property
+    def tasks_this_week(self):
+        excluded_phases = ['done', 'finished', 'impediment', 'pending']
+        tasks = Task.objects.filter(project=self)
+        for phase_name in excluded_phases:
+            tasks = tasks.exclude(phase__name=phase_name)
+
+        return tasks
+
     def __unicode__(self):
         return self.name
 
