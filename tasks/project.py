@@ -15,6 +15,17 @@ class ProjectList(ListView):
         return context
 
 
+class ProjectListWeekly(ListView):
+    model = Project
+    template_name = 'tasks/project_list_weekly.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectListWeekly, self).get_context_data(**kwargs)
+        context['messages'] = check_validity()
+        context['chart'] = self.request.GET.get('chart', '1')
+        return context
+
+
 class ProjectDetail(DetailView):
     model = Project
     slug_field = 'name'

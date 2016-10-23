@@ -2,7 +2,9 @@
 {% block title %} {{ project.title }} {% endblock %}
 {% block content %}
 <div class="text-right">
-    Download <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
+    Download
+    <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
+    <a href="{% url 'tasks:project_weekly' project.name %}?chart=0">[without chart]</a>
 </div>
     <h1> {{ project.title }} </h1>
     <table class="table table-bordered">

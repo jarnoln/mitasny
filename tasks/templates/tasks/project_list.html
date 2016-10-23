@@ -1,6 +1,12 @@
 {% extends "tasks/tasks_base.html" %}
 {% block title %} Mitasny {% endblock %}
 {% block content %}
+<div class="text-right">
+    Download
+    <a href="{% url 'tasks:projects_weekly' %}">weekly_report.html</a>
+    <a href="{% url 'tasks:projects_weekly' %}?chart=0">[without chart]</a>
+</div>
+
     <h1> Projects </h1>
     <table class="table">
         <thead>
