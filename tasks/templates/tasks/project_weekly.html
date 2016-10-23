@@ -26,7 +26,7 @@
 <b> This week </b>
 <ul>
     {% for task in project.tasks_this_week.all %}
-    <li> {{ task.title }} {% if task.phase.name == 'continuing' %}(Continuing){% endif %}</li>
+    <li> {{ task.title }} {% if task.phase.name == 'continuing' %}(continuing){% endif %}</li>
         {% if task.description %}
         <ul> <li> {{ task.description }} </li></ul>
         {% endif %}
