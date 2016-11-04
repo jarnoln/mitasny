@@ -14,7 +14,11 @@ class HomePageTest(TestCase):
 
 
 class UserTest(TestCase):
-    def test_login(self):
+    def test_login_get(self):
+        response = self.client.get(reverse('login'))
+        self.assertTemplateUsed(response, 'registration/login.html')
+
+    def test_login_post(self):
         user = auth.models.User.objects.create(username='creator', email='creator@iki.fi')
         user.set_password('pw')
         user.save()
@@ -22,3 +26,13 @@ class UserTest(TestCase):
         self.assertTrue(response.context['user'].is_authenticated())
         self.assertEqual(response.context['user'], user)
         self.assertTemplateUsed(response, 'tasks/project_list.html')
+
+    def test_logout(self):
+        user = auth.models.User.objects.create(username='creator', email='creator@iki.fi')
+        user.set_password('pw')
+        user.save()
+        response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
+        self.assertTrue(response.context['user'].is_authenticated())
+        response = self.client.get(reverse('logout'))
+        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertTemplateUsed(response, 'registration/logged_out.html')
