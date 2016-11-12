@@ -58,5 +58,8 @@ class UserTest(TestCase):
             'password1': 'pass',
             'password2': 'pass'}, follow=True)
         self.assertEqual(auth.models.User.objects.count(), 1)
-        self.assertEqual(auth.models.User.objects.all()[0].username, 'testuser')
+        user = auth.models.User.objects.all()[0]
+        self.assertEqual(user.username, 'testuser')
         self.assertTemplateUsed(response, 'tasks/project_list.html')
+        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertEqual(response.context['user'], user)
