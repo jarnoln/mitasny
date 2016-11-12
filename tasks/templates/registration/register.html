@@ -1,0 +1,38 @@
+{% extends 'tasks/tasks_base.html' %}
+{% load i18n %}
+
+{% block title %} {% trans "Register" %} {% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'login' %}">
+      <input type="hidden" name="next" value="{% url 'tasks:projects' %}" />
+  {% csrf_token %}
+  <table class="table">
+    <tr>
+        <th class="nowrap"> {{ form.username.label_tag }} </th>
+        <td> {{ form.username }} </td>
+        <td> {{ form.username.help_text }} </td>
+    </tr>
+    <tr>
+        <th class="nowrap"> {{ form.password1.label_tag }} </th>
+        <td> {{ form.password1 }} </td>
+        <td> {{ form.password1.help_text }} </td>
+    </tr>
+    <tr>
+        <th class="nowrap"> {{ form.password2.label_tag }} </th>
+        <td> {{ form.password2 }} </td>
+        <td> {{ form.password2.help_text }} </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="submit" id="id_button_login" class="btn btn-primary" value="{% trans 'Register' %}" />
+        </td>
+    </tr>
+  </table>
+</form>
+
+{% if form.errors %}
+<p> {{ form.errors }} </p>
+{% endif %}
+{% endblock %}

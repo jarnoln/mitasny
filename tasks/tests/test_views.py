@@ -48,6 +48,5 @@ class UserTest(TestCase):
         self.assertTemplateUsed(response, 'tasks/project_list.html')
 
     def test_register_get(self):
-        pass
-        # response = self.client.get(reverse('tasks:register'))
-        # self.assertTemplateUsed(response, 'registration/register.html')
+        response = self.client.get(reverse('tasks:register'))
+        self.assertTemplateUsed(response, 'registration/register.html')
