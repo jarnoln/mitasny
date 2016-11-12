@@ -3,6 +3,7 @@ from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from .models import Project
+from .check_validity import check_validity
 
 
 class ProjectList(ListView):
@@ -10,6 +11,18 @@ class ProjectList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectList, self).get_context_data(**kwargs)
+        context['messages'] = check_validity()
+        return context
+
+
+class ProjectListWeekly(ListView):
+    model = Project
+    template_name = 'tasks/project_list_weekly.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectListWeekly, self).get_context_data(**kwargs)
+        context['messages'] = check_validity()
+        context['chart'] = self.request.GET.get('chart', '1')
         return context
 
 

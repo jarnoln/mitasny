@@ -1,0 +1,100 @@
+
+<h1> {{ project.title }} </h1>
+<table>
+{% if project.description %}
+    <tr>
+        <th> Description </th><td> {{ project.description }} </td>
+    </tr>
+{% endif %}
+</table>
+
+{% if project.tasks_last_week %}
+<b> Last week </b>
+<ul>
+    {% for task in project.tasks_last_week.all %}
+    <li> {{ task.title }} </li>
+        {% if task.description %}
+        <ul> <li> {{ task.description }} </li></ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if project.tasks_this_week %}
+<b> This week </b>
+<ul>
+    {% for task in project.tasks_this_week.all %}
+    <li> {{ task.title }} {% if task.phase.name == 'continuing' %}(continuing){% endif %}</li>
+        {% if task.description %}
+        <ul> <li> {{ task.description }} </li></ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if project.impediments %}
+<b> Impediments </b>
+<ul>
+    {% for task in project.impediments.all %}
+    <li> {{ task.title }} </li>
+        {% if task.description %}
+        <ul> <li> {{ task.description }} </li></ul>
+        {% endif %}
+    {% endfor %}
+</ul>
+{% endif %}
+
+{% if project.tasks_unfinished and chart == '1' %}
+<b> Backlog </b>
+    <table>
+        <thead>
+        <tr>
+            <th> Task </th>
+            <th colspan="1"> Days </th>
+    {% if True %}
+            <th colspan="{{ project.total_work_left }}"> &nbsp; </th>
+    {% else %}
+            <th class="week-marker" colspan="5"> Week 38 </th>
+        {% for week in project.total_work_left_weeks_list %}
+            <th class="week-marker" colspan="5"> Week {{ week|add:39 }} </th>
+        {% endfor %}
+    {% endif %}
+        </tr>
+        </thead>
+        <tbody>
+    {% for task in project.tasks_unfinished.all %}
+        <tr>
+            <td class="nowrap"> {{ task.title }} </td>
+            <td class="text-right"> {{ task.work_left }} </td>
+            {% for i in task.cumulative_work_before_list %}
+            <td class="day-marker white"> &nbsp; </td>
+            {% endfor %}
+            {% for i in task.work_left_list %}
+            <td class="day-marker green"> &nbsp; </td>
+            {% endfor %}
+            <td class="nowrap" colspan="3"> {{ task.finish_date|date:"m-d" }} </td>
+        </tr>
+    {% endfor %}
+        <tr>
+            <th colspan="2"> &nbsp; </th>
+        {% for day in project.total_work_left_list %}
+            <th class="text-right {% if day.weekday == 0 %}week-start{% endif %}">
+                {{ day.day }} <br />
+                {{ day.month }}
+            </th>
+        {% endfor %}
+            <th> &nbsp; </th>
+        </tr>
+
+        <tr>
+            <td colspan="1"> <b> Total </b> </td>
+            <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
+            <td class="text-right" colspan="{{ project.total_work_left }}">
+                Estimated finish date: <b> {{ project.finish_date|date:"Y-m-d" }} </b>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endif %}
+<p> <b> Estimated total work required by remaining tasks: {{ project.total_work_left_string }} </b> </p>
+

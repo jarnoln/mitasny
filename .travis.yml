@@ -1,0 +1,20 @@
+language: python
+  - "2.7"
+
+sudo: required
+dist: trusty
+
+install:
+  - pip install -r requirements.txt
+
+before_script:
+  - python mitasny/generate_secret.py > mitasny/secret_key.py
+  - mkdir ../db
+  - python manage.py makemigrations
+  - python manage.py migrate
+
+script:
+  - coverage run --source='./tasks' manage.py test tasks
+
+after_success:
+  - codecov

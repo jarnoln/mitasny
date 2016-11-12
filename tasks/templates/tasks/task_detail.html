@@ -14,9 +14,15 @@
         <tr>
             <td>
                 <a class="btn btn-default" href="{% url 'tasks:project' task.project.name %}">Back to project</a>
+{% if user.is_authenticated %}
                 <a class="btn btn-primary" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a>
+{% endif %}
             </td>
-            <td> <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete task</a> </td>
+            <td>
+{% if user.is_authenticated %}
+                <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete task</a>
+{% endif %}
+            </td>
         </tr>
     </table>
 {% endblock %}

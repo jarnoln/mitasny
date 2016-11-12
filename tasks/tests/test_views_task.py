@@ -211,7 +211,7 @@ class UpdateTaskTest(ExtTestCase):
         creator = self.create_and_log_in_user()
         project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
         task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
-        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
         response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
                                     {'title': 'Task updated', 'description': 'Updated', 'work_left': '5', 'order': '9'},
                                     follow=True)
@@ -238,6 +238,24 @@ class UpdateTaskTest(ExtTestCase):
         task = Task.objects.first()
         self.assertEqual(task.title, 'Task updated')
         self.assertEqual(task.phase.name, 'ongoing')
+
+    def test_cant_update_task_if_not_logged_in(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        task = Task.objects.create(project=project, created_by=creator, name="test_task", title="Test task")
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:task_update', args=[project.name, task.name]),
+                                    {'title': 'Task updated', 'description': 'Updated', 'work_left': '5', 'order': '9'},
+                                    follow=True)
+        task = Task.objects.all()[0]
+        self.assertEqual(task.title, 'Test task')
+        self.assertEqual(task.description, None)
+        self.assertEqual(task.work_left, 1)
+        self.assertEqual(task.order, 0)
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        self.assertTemplateUsed(response, 'tasks/task_detail.html')
 
 
 class MoveTaskTest(ExtTestCase):

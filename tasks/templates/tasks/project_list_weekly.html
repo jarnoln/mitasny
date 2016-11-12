@@ -2,6 +2,8 @@
 {% block title %} {{ project.title }} {% endblock %}
 {% block content %}
 
-{% include "tasks/project_weekly_snip.html" %}
+{% for project in project_list %}
+    {% include "tasks/project_weekly_snip.html" %}
+{% endfor %}
 
 {% endblock %}

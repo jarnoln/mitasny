@@ -5,7 +5,7 @@ from tasks.models import Project, Task
 from .ext_test_case import ExtTestCase
 
 
-class ProjectListTest(TestCase):
+class ProjectListTest(ExtTestCase):
     def test_reverse(self):
         self.assertEqual(reverse('tasks:projects'), '/projects/')
 
@@ -25,6 +25,36 @@ class ProjectListTest(TestCase):
         self.assertContains(response, project.title)
         Project.objects.create(name='test_project_2', created_by=creator)
         response = self.client.get(reverse('tasks:projects'))
+        self.assertEqual(response.context['project_list'].count(), 2)
+
+    def test_messages(self):
+        response = self.client.get(reverse('tasks:projects'))
+        self.assertEqual(len(response.context['messages']), 7)
+        self.create_default_phases()
+        response = self.client.get(reverse('tasks:projects'))
+        self.assertEqual(len(response.context['messages']), 0)
+
+
+class ProjectListWeeklyReportTest(TestCase):
+    def test_reverse(self):
+        self.assertEqual(reverse('tasks:projects_weekly'), '/projects/weekly/')
+
+    def test_uses_correct_template(self):
+        response = self.client.get(reverse('tasks:projects_weekly'))
+        self.assertTemplateUsed(response, 'tasks/project_list_weekly.html')
+
+    def test_default_context(self):
+        response = self.client.get(reverse('tasks:projects_weekly'))
+        self.assertEqual(response.context['project_list'].count(), 0)
+        self.assertEqual(response.context['chart'], '1')
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
+        response = self.client.get(reverse('tasks:projects_weekly'))
+        self.assertEqual(response.context['project_list'].count(), 1)
+        self.assertEqual(response.context['project_list'][0], project)
+        self.assertContains(response, project.title)
+        Project.objects.create(name='test_project_2', created_by=creator)
+        response = self.client.get(reverse('tasks:projects_weekly'))
         self.assertEqual(response.context['project_list'].count(), 2)
 
 
@@ -90,6 +120,7 @@ class ProjectWeeklyReportTest(TestCase):
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project_weekly', args=[project.name]))
         self.assertEqual(response.context['project'], project)
+        self.assertEqual(response.context['chart'], '1')
 
     def test_404_not_found(self):
         response = self.client.get(reverse('tasks:project', args=['missing_project']))

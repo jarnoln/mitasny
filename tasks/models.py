@@ -95,6 +95,10 @@ class Project(models.Model):
         return self.tasks_by_phase_name('ongoing')
 
     @property
+    def tasks_continuing(self):
+        return self.tasks_by_phase_name('continuing')
+
+    @property
     def tasks_pending(self):
         return self.tasks_by_phase_name('pending')
 
@@ -115,6 +119,18 @@ class Project(models.Model):
     def tasks_not_done(self):
         done = Phase.objects.get(name='done')
         return Task.objects.filter(project=self).exclude(phase=done)
+
+    @property
+    def tasks_last_week(self):
+        finished_or_continuing = models.Q(phase__name='finished') | models.Q(phase__name='continuing')
+        tasks = Task.objects.filter(project=self).filter(finished_or_continuing)
+        return tasks
+
+    @property
+    def tasks_this_week(self):
+        ongoing_or_continuing = models.Q(phase__name='ongoing') | models.Q(phase__name='continuing')
+        tasks = Task.objects.filter(project=self).filter(ongoing_or_continuing)
+        return tasks
 
     def __unicode__(self):
         return self.name
@@ -222,6 +238,14 @@ class Task(models.Model):
             return None
         else:
             return preceding_tasks.first()
+
+    @property
+    def warnings(self):
+        if self.phase:
+            if self.phase.name == 'finished' or self.phase.name == 'done':
+                if self.work_left > 0:
+                    return "Task has remaining work: %d" % self.work_left
+        return ''
 
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
