@@ -36,3 +36,18 @@ class UserTest(TestCase):
         response = self.client.get(reverse('logout'))
         self.assertFalse(response.context['user'].is_authenticated())
         self.assertTemplateUsed(response, 'registration/logged_out.html')
+
+    def test_logout_redirect(self):
+        user = auth.models.User.objects.create(username='creator', email='creator@iki.fi')
+        user.set_password('pw')
+        user.save()
+        response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
+        self.assertTrue(response.context['user'].is_authenticated())
+        response = self.client.get(reverse('logout') + '?next=' + reverse('tasks:projects'), follow=True)
+        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertTemplateUsed(response, 'tasks/project_list.html')
+
+    def test_register_get(self):
+        pass
+        # response = self.client.get(reverse('tasks:register'))
+        # self.assertTemplateUsed(response, 'registration/register.html')
