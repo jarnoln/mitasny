@@ -47,6 +47,16 @@ class UserTest(TestCase):
         self.assertFalse(response.context['user'].is_authenticated())
         self.assertTemplateUsed(response, 'tasks/project_list.html')
 
-    def test_register_get(self):
+    def test_register_view(self):
         response = self.client.get(reverse('tasks:register'))
         self.assertTemplateUsed(response, 'registration/register.html')
+
+    def test_register_user(self):
+        self.assertEqual(auth.models.User.objects.count(), 0)
+        response = self.client.post(reverse('tasks:register'), data={
+            'username': 'testuser',
+            'password1': 'pass',
+            'password2': 'pass'}, follow=True)
+        self.assertEqual(auth.models.User.objects.count(), 1)
+        self.assertEqual(auth.models.User.objects.all()[0].username, 'testuser')
+        self.assertTemplateUsed(response, 'tasks/project_list.html')
