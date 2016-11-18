@@ -1,0 +1,17 @@
+{% extends "tasks/tasks_base.html" %}
+{% block title %} Mitasny {% endblock %}
+{% block content %}
+    <h1> Users </h1>
+    <table class="table">
+        <thead>
+            <th> Name </th>
+        </thead>
+        <tbody>
+{% for user in user_list %}
+        <tr>
+            <td> <a href=""> {{ user.username }} </a> </td>
+        </tr>
+{% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

@@ -51,6 +51,9 @@
       <ul class="nav navbar-nav">
         <li class="{% if project_list %}active{% endif %}"> <a href="{% url 'tasks:projects' %}"> Projects </a></li>
       </ul>
+      <ul class="nav navbar-nav">
+        <li class="{% if user_list %}active{% endif %}"> <a href="{% url 'tasks:users' %}"> Users </a></li>
+      </ul>
       <ul class="nav navbar-nav navbar-right">
 {% if user.is_authenticated %}
         <li><a href="">{{ user.username }}</a></li>

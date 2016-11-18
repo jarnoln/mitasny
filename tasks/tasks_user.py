@@ -1,10 +1,19 @@
 from django.core.urlresolvers import reverse, reverse_lazy
-# from django.views.generic import ListView, DetailView, TemplateView
+from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 # from django.contrib.auth.models import User
 from django.contrib import auth
 # from django.contrib.auth.forms import UserCreationForm
+
+
+class TasksUserList(ListView):
+    model = auth.models.User
+
+    def get_context_data(self, **kwargs):
+        context = super(TasksUserList, self).get_context_data(**kwargs)
+        context['messages'] = self.request.GET.get('message', '')
+        return context
 
 
 class TasksUserRegister(FormView):

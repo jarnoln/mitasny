@@ -4,6 +4,28 @@ from django.contrib import auth
 from .ext_test_case import ExtTestCase
 
 
+class UserListTest(ExtTestCase):
+    def test_reverse(self):
+        self.assertEqual(reverse('tasks:users'), '/users/')
+
+    def test_uses_correct_template(self):
+        response = self.client.get(reverse('tasks:users'))
+        self.assertTemplateUsed(response, 'tasks/tasks_base.html')
+        self.assertTemplateUsed(response, 'auth/user_list.html')
+
+    def test_default_context(self):
+        response = self.client.get(reverse('tasks:users'))
+        self.assertEqual(response.context['user_list'].count(), 0)
+        user_1 = auth.models.User.objects.create(username='user_1')
+        response = self.client.get(reverse('tasks:users'))
+        self.assertEqual(response.context['user_list'].count(), 1)
+        self.assertEqual(response.context['user_list'][0], user_1)
+        self.assertContains(response, user_1.username)
+        user_2 = auth.models.User.objects.create(username='user_2')
+        response = self.client.get(reverse('tasks:users'))
+        self.assertEqual(response.context['user_list'].count(), 2)
+
+
 class UserLoginLogoutTest(TestCase):
     def test_login_get(self):
         response = self.client.get(reverse('login'))
