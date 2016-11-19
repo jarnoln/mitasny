@@ -183,6 +183,39 @@ class CreateProjectTest(ExtTestCase):
         self.assertContains(response, 'Project with this Name already exists')
 
 
+class UpdateProjectTest(ExtTestCase):
+    def test_reverse_task_edit(self):
+        self.assertEqual(reverse('tasks:project_update', args=['test_project']),
+                         '/project/test_project/update/')
+
+    def test_uses_correct_template(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        response = self.client.get(reverse('tasks:project_update', args=[project.name]))
+        self.assertTemplateUsed(response, 'tasks/project_form.html')
+
+    def test_default_context(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        response = self.client.get(reverse('tasks:project_update', args=[project.name]))
+        self.assertEqual(response.context['project'], project)
+        self.assertEqual(response.context['message'], '')
+
+    def test_can_update_project(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
+        self.assertEqual(Project.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:project_update', args=[project.name]),
+                                    {'name': 'updated_name', 'title': 'Project updated', 'description': 'Updated'},
+                                    follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
+        project = Project.objects.all()[0]
+        self.assertEqual(project.name, 'updated_name')
+        self.assertEqual(project.title, 'Project updated')
+        self.assertEqual(project.description, 'Updated')
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+
+
 class DeleteProjectPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
         self.assertEqual(reverse('tasks:project_delete', args=['test_project']), '/project/test_project/delete/')

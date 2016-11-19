@@ -1,7 +1,7 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .tasks_user import TasksUserList, TasksUserRegister, TasksUserDelete
-from .project import ProjectList, ProjectListWeekly, ProjectDetail, ProjectWeekly, ProjectCreate, ProjectDelete
+from .project import ProjectList, ProjectListWeekly, ProjectDetail, ProjectWeekly, ProjectCreate, ProjectUpdate, ProjectDelete
 from .task import TaskList, TaskDetail, TaskCreate, TaskUpdate, TaskMove, TaskDelete
 
 
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/$', TaskDetail.as_view(), name='task'),
     url(r'^project/(?P<slug>[\w\.-]+)/tab/(?P<tab>[\w\.-]+)/$', ProjectDetail.as_view(), name='project_tab'),
     url(r'^project/(?P<slug>[\w\.-]+)/weekly_report.html$', ProjectWeekly.as_view(), name='project_weekly'),
+    url(r'^project/(?P<slug>[\w\.-]+)/update/$', login_required(ProjectUpdate.as_view()), name='project_update'),
     url(r'^project/(?P<slug>[\w\.-]+)/delete/$', login_required(ProjectDelete.as_view()), name='project_delete'),
     url(r'^project/(?P<slug>[\w\.-]+)/$', ProjectDetail.as_view(), name='project'),
     url(r'^projects/weekly/$', ProjectListWeekly.as_view(), name='projects_weekly'),

@@ -5,10 +5,11 @@
 {% block content %}
     {% if project %}
 <h1> {{ project.title }} </h1>
+<form action="{% url 'tasks:project_update' project.name %}" method="post">
     {% else %}
 <h1> {% trans "Create new project" %} </h1>
-    {% endif %}
 <form action="{% url 'tasks:project_create' %}" method="post">
+    {% endif %}
     {% csrf_token %}
 
 <table class="table">
