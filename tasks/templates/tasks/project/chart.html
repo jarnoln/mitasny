@@ -19,7 +19,13 @@
             <td class="day-marker white"> &nbsp; </td>
             {% endfor %}
             {% for i in task.work_left_list %}
+                {% if task.phase.name == 'ongoing' or task.phase.name == 'continuing' %}
+            <td class="day-marker yellow"> &nbsp; </td>
+                {% elif task.phase.name == 'blocked' %}
+            <td class="day-marker red"> &nbsp; </td>
+                {% else %}
             <td class="day-marker green"> &nbsp; </td>
+                {% endif %}
             {% endfor %}
             <td class="nowrap" colspan="2" style="border-style: solid;border-width: 1px;border-color:white"> {{ task.finish_date|date:"m-d" }} </td>
         </tr>
