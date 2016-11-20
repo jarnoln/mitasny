@@ -104,6 +104,33 @@ class UserRegisterTest(TestCase):
         self.assertEqual(response.context['user'], user)
 
 
+class UpdateUserTest(ExtTestCase):
+    def test_reverse_task_edit(self):
+        self.assertEqual(reverse('tasks:user_update', args=['test_user']),
+                         '/user/test_user/edit/')
+
+    def test_uses_correct_template(self):
+        user = self.create_and_log_in_user()
+        response = self.client.get(reverse('tasks:user_update', args=[user.username]))
+        self.assertTemplateUsed(response, 'auth/user_form.html')
+
+    def test_default_context(self):
+        user = self.create_and_log_in_user()
+        response = self.client.get(reverse('tasks:user_update', args=[user.username]))
+        self.assertEqual(response.context['user'], user)
+        self.assertEqual(response.context['message'], '')
+
+    def test_can_update_user(self):
+        user = self.create_and_log_in_user()
+        response = self.client.post(reverse('tasks:user_update', args=[user.username]),
+                                    {'username': 'batman', 'email': 'bruce@waynetech.com' },
+                                    follow=True)
+        self.assertEqual(auth.models.User.objects.all().count(), 1)
+        user = auth.models.User.objects.all()[0]
+        self.assertEqual(user.email, 'bruce@waynetech.com')
+        self.assertTemplateUsed(response, 'auth/user_detail.html')
+
+
 class DeleteUserPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
         self.assertEqual(reverse('tasks:user_delete', args=['test_user']), '/user/test_user/delete/')

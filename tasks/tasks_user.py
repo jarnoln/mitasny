@@ -1,6 +1,6 @@
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import UpdateView, DeleteView, FormView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 # from django.contrib.auth.models import User
 from django.contrib import auth
@@ -48,6 +48,23 @@ class TasksUserRegister(FormView):
         authenticated_user = auth.authenticate(username=user.username, password=cd['password1'])
         auth.login(self.request, authenticated_user)
         return super(TasksUserRegister, self).form_valid(form)
+
+
+class TasksUserUpdate(UpdateView):
+    model = auth.models.User
+    slug_field = 'username'
+    fields = ['username', 'email']
+
+    def get_context_data(self, **kwargs):
+        context = super(TasksUserUpdate, self).get_context_data(**kwargs)
+        context['message'] = self.request.GET.get('message', '')
+        return context
+
+    def get_success_url(self):
+        if self.object:
+            return reverse_lazy('tasks:user', args=[self.object.username])
+        else:
+            return reverse('tasks:users')
 
 
 class TasksUserDelete(DeleteView):

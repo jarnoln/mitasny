@@ -1,0 +1,33 @@
+{% extends 'tasks/tasks_base.html' %}
+{% load i18n %}
+
+{% block title %} {% trans "Edit" %} {{ user.username }} {% endblock %}
+
+{% block content %}
+
+<form method="post" action="{% url 'tasks:user_update' user.username %}">
+      <input type="hidden" name="next" value="{% url 'tasks:user' user.username %}" />
+  {% csrf_token %}
+  <table class="table">
+    <tr>
+        <th class="nowrap"> {{ form.username.label_tag }} </th>
+        <td> {{ form.username }} </td>
+        <td> {{ form.username.help_text }} </td>
+    </tr>
+    <tr>
+        <th class="nowrap"> {{ form.email.label_tag }} </th>
+        <td> {{ form.email }} </td>
+        <td> {{ form.email.help_text }} </td>
+    </tr>
+    <tr>
+        <td colspan="2">
+            <input type="submit" id="id_button_login" class="btn btn-primary" value="{% trans 'Save' %}" />
+        </td>
+    </tr>
+  </table>
+</form>
+
+{% if form.errors %}
+<p> {{ form.errors }} </p>
+{% endif %}
+{% endblock %}
