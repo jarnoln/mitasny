@@ -23,6 +23,7 @@ class ProjectListWeekly(ListView):
         context = super(ProjectListWeekly, self).get_context_data(**kwargs)
         context['messages'] = check_validity()
         context['chart'] = self.request.GET.get('chart', '1')
+        context['hide_text'] = self.request.GET.get('hide_text', '')
         return context
 
 
@@ -50,6 +51,7 @@ class ProjectWeekly(DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProjectWeekly, self).get_context_data(**kwargs)
         context['chart'] = self.request.GET.get('chart', '1')
+        context['hide_text'] = self.request.GET.get('hide_text', '')
         return context
 
 

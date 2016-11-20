@@ -1,27 +1,29 @@
 {% load i18n %}
 
+{% if not hide_text %}
+
 <h1> {{ project.title }} </h1>
 <table>
-{% if project.description %}
+    {% if project.description %}
     <tr>
         <th> Description </th><td> {{ project.description }} </td>
     </tr>
-{% endif %}
+    {% endif %}
 </table>
 
-{% if project.tasks_last_week %}
+    {% if project.tasks_last_week %}
 <b> {% trans 'Last week' %} </b>
 <ul>
-    {% for task in project.tasks_last_week.all %}
+        {% for task in project.tasks_last_week.all %}
     <li> {{ task.title }} </li>
-        {% if task.description %}
+            {% if task.description %}
         <ul> <li> {{ task.description }} </li></ul>
-        {% endif %}
-    {% endfor %}
+            {% endif %}
+        {% endfor %}
 </ul>
-{% endif %}
+    {% endif %}
 
-{% if project.tasks_this_week %}
+    {% if project.tasks_this_week %}
 <b> {% trans 'This week' %} </b>
 <ul>
     {% for task in project.tasks_this_week.all %}
@@ -31,9 +33,9 @@
         {% endif %}
     {% endfor %}
 </ul>
-{% endif %}
+    {% endif %}
 
-{% if project.impediments %}
+    {% if project.impediments %}
 <b> {% trans 'Impediments' %} </b>
 <ul>
     {% for task in project.impediments.all %}
@@ -43,6 +45,7 @@
         {% endif %}
     {% endfor %}
 </ul>
+    {% endif %}
 {% endif %}
 
 {% if project.tasks_unfinished and chart == '1' %}
@@ -86,7 +89,6 @@
         {% endfor %}
             <th> &nbsp; </th>
         </tr>
-
         <tr>
             <td colspan="1"> <b> {% trans 'Total' %} </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
@@ -97,5 +99,6 @@
         </tbody>
     </table>
 {% endif %}
+{% if not hide_text %}
 <p> <b> {% trans 'Estimated total work required by remaining tasks' %}: {{ project.total_work_left_string }} </b> </p>
-
+{% endif %}
