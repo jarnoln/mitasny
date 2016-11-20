@@ -135,8 +135,7 @@ class TaskSetPhaseTo(View):
         target_phase = get_object_or_404(models.Phase, name=target_phase_name)
         if target_phase.name == 'finished':
             if task.phase.name == 'ongoing' or target_phase_name == 'continuing':
-                task.phase = target_phase
-                task.save()
+                task.set_phase(target_phase_name)
                 return HttpResponseRedirect(project.get_absolute_url())
 
         return HttpResponseRedirect(project.get_absolute_url())

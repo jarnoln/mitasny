@@ -247,6 +247,14 @@ class Task(models.Model):
                     return "Task has remaining work: %d" % self.work_left
         return ''
 
+
+    @property
+    def next_phase_url(self):
+        if self.phase:
+            if self.phase.name == 'ongoing' or self.phase.name == 'continuing':
+                return reverse('tasks:task_set_phase_to', args=[self.project.name, self.name, 'finished'])
+        return ''
+
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
             return True

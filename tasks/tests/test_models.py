@@ -1,6 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse, reverse_lazy
 from ext_test_case import ExtTestCase
 from tasks.models import Project, Priority, TaskStatus, Phase, Task
 
@@ -334,3 +335,11 @@ class TaskModelTest(TestCase):
         self.assertFalse(is_success)
         self.assertEqual(task_1.order, 2)
         self.assertEqual(task_2.order, 1)
+
+    def test_next_phase_url(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', created_by=creator)
+        ongoing = Phase.objects.create(name='ongoing', title='Ongoing')
+        finished = Phase.objects.create(name='finished', title='Finished')
+        task = Task.objects.create(project=project, order=1, name='task_1', phase=ongoing, created_by=creator)
+        self.assertEqual(task.next_phase_url, reverse('tasks:task_set_phase_to', args=[project.name, task.name, 'finished']))
