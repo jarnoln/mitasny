@@ -7,6 +7,15 @@ from django.contrib import auth
 # from django.contrib.auth.forms import UserCreationForm
 
 
+def can_edit_user(logged_user, target_user):
+    ''' Is logged in user allowed to edit target user '''
+    if logged_user == target_user:
+        return True
+    if logged_user.is_staff:
+        return True
+    return False
+
+
 class TasksUserList(ListView):
     model = auth.models.User
 
@@ -26,7 +35,7 @@ class TasksUserDetail(DetailView):
         context = super(TasksUserDetail, self).get_context_data(**kwargs)
         context['message'] = self.request.GET.get('message', '')
         # context['can_edit'] = self.object.can_edit(self.request.user)
-        context['can_edit'] = False
+        context['can_edit'] = can_edit_user(logged_user=self.request.user, target_user=self.object)
         return context
 
 
@@ -55,6 +64,14 @@ class TasksUserUpdate(UpdateView):
     slug_field = 'username'
     fields = ['username', 'email']
 
+    def get_object(self):
+        target_user = super(TasksUserUpdate, self).get_object()
+        if can_edit_user(logged_user=self.request.user, target_user=target_user):
+            return target_user
+
+        # Todo: Smarter way to handle this
+        raise Http404
+
     def get_context_data(self, **kwargs):
         context = super(TasksUserUpdate, self).get_context_data(**kwargs)
         context['message'] = self.request.GET.get('message', '')
@@ -73,9 +90,9 @@ class TasksUserDelete(DeleteView):
     success_url = reverse_lazy('tasks:projects')
 
     def get_object(self):
-        user = super(TasksUserDelete, self).get_object()
-        if user == self.request.user or self.request.user.is_staff:
-            return user
+        target_user = super(TasksUserDelete, self).get_object()
+        if can_edit_user(logged_user=self.request.user, target_user=target_user):
+            return target_user
 
         # Todo: Smarter way to handle this
         raise Http404
