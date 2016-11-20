@@ -25,7 +25,11 @@
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_move' task.project.name task.name 'up' %}"> &uarr; </a> </td>
             <td> <a class="btn btn-primary btn-xs" href="{% url 'tasks:task_move' task.project.name task.name 'down' %}"> &darr; </a> </td>
                 {% if task.next_phase_url %}
-            <td> <a class="btn btn-xs btn-primary" href="{{ task.next_phase_url }}"> {% trans 'Finish' %} </a></td>
+            <td>
+                <a class="btn btn-xs btn-primary" href="{{ task.next_phase_url.url }}">
+                    {{ task.next_phase_url.title }}
+                </a>
+            </td>
                 {% endif %}
             {% endif %}
             {% if task.warnings %}

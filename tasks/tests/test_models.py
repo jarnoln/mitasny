@@ -342,4 +342,6 @@ class TaskModelTest(TestCase):
         ongoing = Phase.objects.create(name='ongoing', title='Ongoing')
         finished = Phase.objects.create(name='finished', title='Finished')
         task = Task.objects.create(project=project, order=1, name='task_1', phase=ongoing, created_by=creator)
-        self.assertEqual(task.next_phase_url, reverse('tasks:task_set_phase_to', args=[project.name, task.name, 'finished']))
+        self.assertEqual(task.next_phase_url['url'],
+                         reverse('tasks:task_set_phase_to', args=[project.name, task.name, 'finished']))
+        self.assertEqual(task.next_phase_url['title'], 'Finish')
