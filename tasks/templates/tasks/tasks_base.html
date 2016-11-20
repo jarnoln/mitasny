@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+{% load i18n %}
   <head>
     <meta charset="UTF-8">
     <title> {% block title %}Mitasny{% endblock %}</title>
@@ -49,18 +50,22 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="{% if project_list %}active{% endif %}"> <a href="{% url 'tasks:projects' %}"> Projects </a></li>
+        <li class="{% if project_list %}active{% endif %}">
+            <a href="{% url 'tasks:projects' %}"> {% trans 'Projects' %} </a>
+        </li>
       </ul>
       <ul class="nav navbar-nav">
-        <li class="{% if user_list %}active{% endif %}"> <a href="{% url 'tasks:users' %}"> Users </a></li>
+        <li class="{% if user_list %}active{% endif %}">
+            <a href="{% url 'tasks:users' %}"> {% trans 'Users' %} </a>
+        </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
 {% if user.is_authenticated %}
-        <li><a href="{% url 'tasks:user' user.username %}">{{ user.username }}</a></li>
-        <li><a href="{% url 'logout' %}?next={% url 'tasks:projects' %}">Logout</a></li>
+        <li> <a href="{% url 'tasks:user' user.username %}">{{ user.username }}</a> </li>
+        <li> <a href="{% url 'logout' %}?next={% url 'tasks:projects' %}"> {% trans 'Logout' %} </a> </li>
 {% else %}
-        <li><a href="{% url 'login' %}">Login</a></li>
-        <li><a href="{% url 'tasks:register' %}">Register</a></li>
+        <li> <a href="{% url 'login' %}"> {% trans 'Login' %} </a> </li>
+        <li> <a href="{% url 'tasks:register' %}"> {% trans 'Register' %} </a> </li>
 {% endif %}
       </ul>
     </div><!-- /.navbar-collapse -->

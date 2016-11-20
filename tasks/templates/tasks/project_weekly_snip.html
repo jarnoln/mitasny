@@ -1,3 +1,4 @@
+{% load i18n %}
 
 <h1> {{ project.title }} </h1>
 <table>
@@ -9,7 +10,7 @@
 </table>
 
 {% if project.tasks_last_week %}
-<b> Last week </b>
+<b> {% trans 'Last week' %} </b>
 <ul>
     {% for task in project.tasks_last_week.all %}
     <li> {{ task.title }} </li>
@@ -21,7 +22,7 @@
 {% endif %}
 
 {% if project.tasks_this_week %}
-<b> This week </b>
+<b> {% trans 'This week' %} </b>
 <ul>
     {% for task in project.tasks_this_week.all %}
     <li> {{ task.title }} {% if task.phase.name == 'continuing' %}(continuing){% endif %}</li>
@@ -33,7 +34,7 @@
 {% endif %}
 
 {% if project.impediments %}
-<b> Impediments </b>
+<b> {% trans 'Impediments' %} </b>
 <ul>
     {% for task in project.impediments.all %}
     <li> {{ task.title }} </li>
@@ -45,12 +46,12 @@
 {% endif %}
 
 {% if project.tasks_unfinished and chart == '1' %}
-<b> Backlog </b>
+<b> {% trans 'Backlog' %} </b>
     <table>
         <thead>
         <tr>
-            <th> Task </th>
-            <th colspan="1"> Days </th>
+            <th> {% trans 'Task' %} </th>
+            <th colspan="1"> {% trans 'Days' %} </th>
     {% if True %}
             <th colspan="{{ project.total_work_left }}"> &nbsp; </th>
     {% else %}
@@ -87,14 +88,14 @@
         </tr>
 
         <tr>
-            <td colspan="1"> <b> Total </b> </td>
+            <td colspan="1"> <b> {% trans 'Total' %} </b> </td>
             <td class="text-right"> <b> {{ project.total_work_left }} </b> </td>
             <td class="text-right" colspan="{{ project.total_work_left }}">
-                Estimated finish date: <b> {{ project.finish_date|date:"Y-m-d" }} </b>
+                {% trans 'Estimated finish date' %}: <b> {{ project.finish_date|date:"Y-m-d" }} </b>
             </td>
         </tr>
         </tbody>
     </table>
 {% endif %}
-<p> <b> Estimated total work required by remaining tasks: {{ project.total_work_left_string }} </b> </p>
+<p> <b> {% trans 'Estimated total work required by remaining tasks' %}: {{ project.total_work_left_string }} </b> </p>
 

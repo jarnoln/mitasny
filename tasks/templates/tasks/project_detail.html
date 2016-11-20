@@ -1,29 +1,32 @@
 {% extends "tasks/tasks_base.html" %}
+{% load i18n %}
+
 {% block title %} {{ project.title }} {% endblock %}
+
 {% block content %}
 <div class="text-right">
-    Download
+    {% trans 'Download' %}
     <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
-    <a href="{% url 'tasks:project_weekly' project.name %}?chart=0">[without chart]</a>
+    <a href="{% url 'tasks:project_weekly' project.name %}?chart=0">[{% trans 'without chart' %}]</a>
 </div>
     <h1> {{ project.title }} </h1>
     <table class="table table-bordered">
 {% if project.description %}
         <tr>
-            <th> Description </th><td> {{ project.description }} </td>
+            <th> {% trans 'Description' %} </th><td> {{ project.description }} </td>
         </tr>
 {% endif %}
     </table>
 
 <ul class="nav nav-tabs">
     <li role="presentation" class="{% if tab == 'table' %}active{% endif %}">
-        <a href="{% url 'tasks:project_tab' project.name 'table' %}"> Table </a>
+        <a href="{% url 'tasks:project_tab' project.name 'table' %}"> {% trans 'Table' %} </a>
     </li>
     <li role="presentation" class="{% if tab == 'chart' %}active{% endif %}">
-        <a href="{% url 'tasks:project_tab' project.name 'chart' %}"> Chart </a>
+        <a href="{% url 'tasks:project_tab' project.name 'chart' %}"> {% trans 'Chart' %} </a>
     </li>
     <li role="presentation" class="{% if tab == 'archive' %}active{% endif %}">
-        <a href="{% url 'tasks:project_tab' project.name 'archive' %}"> Archive </a>
+        <a href="{% url 'tasks:project_tab' project.name 'archive' %}"> {% trans 'Archive' %} </a>
     </li>
 </ul>
 
@@ -40,7 +43,11 @@
 {% endif %}
 
 {% if user.is_authenticated %}
-<div> <a class="btn btn-primary" href="{% url 'tasks:task_create' project.name %}"> Create task </a> </div>
+<div>
+    <a class="btn btn-primary" href="{% url 'tasks:task_create' project.name %}">
+        {% trans 'Create task' %}
+    </a>
+</div>
 {% endif %}
 
 {% endblock %}

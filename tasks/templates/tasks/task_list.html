@@ -1,7 +1,9 @@
 {% extends "tasks/tasks_base.html" %}
-{% block title %} Tasks {% endblock %}
+{% load i18n %}
+
+{% block title %} {% trans 'Tasks' %} {% endblock %}
 {% block content %}
-    <h1> Tasks </h1>
+    <h1> {% trans 'Tasks' %} </h1>
     <table>
 {% for task in task_list %}
         <tr> <td> <a href="{{ task.project.get_absolute_url }}"> {{ project.title }} </a> </td></tr>

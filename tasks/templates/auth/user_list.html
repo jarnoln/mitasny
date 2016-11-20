@@ -1,15 +1,22 @@
 {% extends "tasks/tasks_base.html" %}
-{% block title %} Mitasny {% endblock %}
+{% load i18n %}
+
+{% block title %} Mitasny: {% trans 'Users' %} {% endblock %}
+
 {% block content %}
-    <h1> Users </h1>
+    <h1> {% trans 'Users' %} </h1>
     <table class="table">
         <thead>
-            <th> Name </th>
+            <th> {% trans 'Username' %} </th>
+            <th colspan="2"> {% trans 'Name' %} </th>
+            <th> {% trans 'Email' %} </th>
         </thead>
         <tbody>
 {% for user in user_list %}
         <tr>
             <td> <a href="{% url 'tasks:user' user.username %}"> {{ user.username }} </a> </td>
+            <td> {{ user.last_name }} </td>
+            <td> {{ user.first_name }} </td>
             <td> {{ user.email }} </td>
         </tr>
 {% endfor %}

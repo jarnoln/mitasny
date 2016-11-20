@@ -1,26 +1,35 @@
 {% extends "tasks/tasks_base.html" %}
-{% block title %} Mitasny {% endblock %}
+{% load i18n %}
+
+{% block title %} {{ task.title }} {% endblock %}
+
 {% block content %}
 
     <h2> <a href="{{ task.project.get_absolute_url }}"> {{ task.project.title }} </a> </h2>
     <h1> {{ task.title }} </h1>
     <table class="table">
         <tr>
-            <th> Name </th><td> {{ task.name }} </td>
+            <th> {% trans 'Name' %} </th><td> {{ task.name }} </td>
         </tr>
         <tr>
-            <th> Description </th><td> {{ task.description }} </td>
+            <th> {% trans 'Description' %} </th><td> {{ task.description }} </td>
         </tr>
         <tr>
             <td>
-                <a class="btn btn-default" href="{% url 'tasks:project' task.project.name %}">Back to project</a>
+                <a class="btn btn-default" href="{% url 'tasks:project' task.project.name %}">
+                    {% trans 'Back to project' %}
+                </a>
 {% if user.is_authenticated %}
-                <a class="btn btn-primary" href="{% url 'tasks:task_update' task.project.name task.name %}">Edit</a>
+                <a class="btn btn-primary" href="{% url 'tasks:task_update' task.project.name task.name %}">
+                    {% trans 'Edit' %}
+                </a>
 {% endif %}
             </td>
             <td>
 {% if user.is_authenticated %}
-                <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">Delete task</a>
+                <a class="btn btn-danger" href="{% url 'tasks:task_delete' task.project.name task.name %}">
+                    {% trans 'Delete task' %}
+                </a>
 {% endif %}
             </td>
         </tr>
