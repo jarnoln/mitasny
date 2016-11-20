@@ -257,6 +257,9 @@ class Task(models.Model):
             elif self.phase.name == 'ongoing' or self.phase.name == 'continuing':
                 url = reverse('tasks:task_set_phase_to', args=[self.project.name, self.name, 'finished'])
                 return { 'title': 'Finish', 'url': url}
+            elif self.phase.name == 'finished':
+                url = reverse('tasks:task_set_phase_to', args=[self.project.name, self.name, 'done'])
+                return { 'title': 'Archive', 'url': url}
         return None
 
     def can_edit(self, user):

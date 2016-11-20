@@ -142,7 +142,11 @@ class TaskSetPhaseTo(View):
                 task.work_left = 0
                 task.set_phase(target_phase_name)
                 return HttpResponseRedirect(project.get_absolute_url())
-
+        elif target_phase.name == 'done':
+            if task.phase.name == 'finished':
+                task.work_left = 0
+                task.set_phase(target_phase_name)
+                return HttpResponseRedirect(project.get_absolute_url())
         return HttpResponseRedirect(project.get_absolute_url())
 
 

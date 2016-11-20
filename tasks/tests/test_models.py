@@ -350,3 +350,7 @@ class TaskModelTest(TestCase):
         self.assertEqual(task_2.next_phase_url['url'],
                          reverse('tasks:task_set_phase_to', args=[project.name, task_2.name, 'finished']))
         self.assertEqual(task_2.next_phase_url['title'], 'Finish')
+        task_3 = Task.objects.create(project=project, name='task_3', phase=finished, created_by=creator)
+        self.assertEqual(task_3.next_phase_url['url'],
+                         reverse('tasks:task_set_phase_to', args=[project.name, task_3.name, 'done']))
+        self.assertEqual(task_3.next_phase_url['title'], 'Archive')

@@ -340,6 +340,22 @@ class UpdateTaskStatusTest(ExtTestCase):
         self.assertEqual(task.phase.name, 'finished')
         self.assertEqual(task.work_left, 0)
 
+    def test_set_phase_to_done(self):
+        self.create_default_phases()
+        phase_finished = Phase.objects.get(name='finished')
+        phase_done = Phase.objects.get(name='done')
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task = Task.objects.create(project=project, created_by=creator, name="task_1", order=1, work_left=0,
+                                   phase=phase_finished)
+        self.assertEqual(task.phase.name, 'finished')
+        response = self.client.get(reverse('tasks:task_set_phase_to', args=[project.name, task.name, phase_done.name]),
+                                   follow=True)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        task = Task.objects.first()
+        self.assertEqual(task.phase.name, 'done')
+        self.assertEqual(task.work_left, 0)
+
 
 class DeleteTaskPageTest(ExtTestCase):
     def test_reverse_blog_delete(self):
