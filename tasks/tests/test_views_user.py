@@ -26,6 +26,27 @@ class UserListTest(ExtTestCase):
         self.assertEqual(response.context['user_list'].count(), 2)
 
 
+class UserPageTest(ExtTestCase):
+    def test_reverse(self):
+        self.assertEqual(reverse('tasks:user', args=['test_user']), '/user/test_user/')
+
+    def test_uses_correct_template(self):
+        user = auth.models.User.objects.create(username='test_user')
+        response = self.client.get(reverse('tasks:user', args=[user.username]))
+        self.assertTemplateUsed(response, 'auth/user_detail.html')
+
+    def test_default_context(self):
+        user = auth.models.User.objects.create(username='test_user')
+        response = self.client.get(reverse('tasks:user', args=[user.username]))
+        self.assertEqual(response.context['user'], user)
+        self.assertEqual(response.context['message'], '')
+        self.assertEqual(response.context['can_edit'], False)
+
+    def test_404_not_found(self):
+        response = self.client.get(reverse('tasks:user', args=['missing_user']))
+        self.assertTemplateUsed(response, '404.html')
+
+
 class UserLoginLogoutTest(TestCase):
     def test_login_get(self):
         response = self.client.get(reverse('login'))

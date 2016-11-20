@@ -1,0 +1,15 @@
+{% extends "tasks/tasks_base.html" %}
+{% block title %} {{ user.username }} {% endblock %}
+{% block content %}
+    <h1> {{ user.username }} </h1>
+    <table class="table">
+        <tr>
+            <th> Name </th>
+            <td> {{ user.username }} </td>
+        </tr>
+        <tr>
+            <th> Email </th>
+            <td> {{ user.email }} </td>
+        </tr>
+    </table>
+{% endblock %}

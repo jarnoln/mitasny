@@ -16,6 +16,20 @@ class TasksUserList(ListView):
         return context
 
 
+class TasksUserDetail(DetailView):
+    model = auth.models.User
+    slug_field = 'username'
+    fields = ['username', 'first_name', 'last_name', 'email']
+    context_object_name = 'user'
+
+    def get_context_data(self, **kwargs):
+        context = super(TasksUserDetail, self).get_context_data(**kwargs)
+        context['message'] = self.request.GET.get('message', '')
+        # context['can_edit'] = self.object.can_edit(self.request.user)
+        context['can_edit'] = False
+        return context
+
+
 class TasksUserRegister(FormView):
     template_name = 'registration/register.html'
     form_class = auth.forms.UserCreationForm
