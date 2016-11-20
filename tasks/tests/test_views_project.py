@@ -46,7 +46,7 @@ class ProjectListWeeklyReportTest(TestCase):
     def test_default_context(self):
         response = self.client.get(reverse('tasks:projects_weekly'))
         self.assertEqual(response.context['project_list'].count(), 0)
-        self.assertEqual(response.context['chart'], '1')
+        self.assertEqual(response.context['hide_chart'], '')
         self.assertEqual(response.context['hide_text'], '')
         creator = User.objects.create(username='creator')
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
@@ -121,7 +121,7 @@ class ProjectWeeklyReportTest(TestCase):
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project_weekly', args=[project.name]))
         self.assertEqual(response.context['project'], project)
-        self.assertEqual(response.context['chart'], '1')
+        self.assertEqual(response.context['hide_chart'], '')
         self.assertEqual(response.context['hide_text'], '')
         self.assertContains(response, project.title)
 
@@ -130,8 +130,16 @@ class ProjectWeeklyReportTest(TestCase):
         project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
         response = self.client.get(reverse('tasks:project_weekly', args=[project.name]) + '?hide_text=1')
         self.assertEqual(response.context['project'], project)
-        self.assertEqual(response.context['chart'], '1')
+        self.assertEqual(response.context['hide_chart'], '')
         self.assertEqual(response.context['hide_text'], '1')
+
+    def test_hide_chart(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(name='test_project', title='Test project', created_by=creator)
+        response = self.client.get(reverse('tasks:project_weekly', args=[project.name]) + '?hide_chart=1')
+        self.assertEqual(response.context['project'], project)
+        self.assertEqual(response.context['hide_chart'], '1')
+        self.assertEqual(response.context['hide_text'], '')
         self.assertContains(response, project.title)
 
     def test_404_not_found(self):

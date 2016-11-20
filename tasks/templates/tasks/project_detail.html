@@ -7,7 +7,8 @@
 <div class="text-right">
     {% trans 'Download' %}
     <a href="{% url 'tasks:project_weekly' project.name %}">weekly_report.html</a>
-    <a href="{% url 'tasks:project_weekly' project.name %}?chart=0">[{% trans 'without chart' %}]</a>
+    <a href="{% url 'tasks:project_weekly' project.name %}?hide_chart=1">[{% trans 'without chart' %}]</a>
+    <a href="{% url 'tasks:project_weekly' project.name %}?hide_text=1">[{% trans 'chart only' %}]</a>
 </div>
     <h1> {{ project.title }} </h1>
     <table class="table table-bordered">

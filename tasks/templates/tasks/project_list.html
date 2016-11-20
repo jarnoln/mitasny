@@ -6,7 +6,8 @@
 <div class="text-right">
     {% trans 'Download' %}
     <a href="{% url 'tasks:projects_weekly' %}">weekly_report.html</a>
-    <a href="{% url 'tasks:projects_weekly' %}?chart=0">[{% trans 'without chart' %}]</a>
+    <a href="{% url 'tasks:projects_weekly' %}?hide_chart=1">[{% trans 'without charts' %}]</a>
+    <a href="{% url 'tasks:projects_weekly' %}?hide_text=1">[{% trans 'charts only' %}]</a>
 </div>
 
     <h1> Projects </h1>

@@ -48,7 +48,7 @@
     {% endif %}
 {% endif %}
 
-{% if project.tasks_unfinished and chart == '1' %}
+{% if project.tasks_unfinished and not hide_chart %}
 <b> {% trans 'Backlog' %} </b>
     <table>
         <thead>
