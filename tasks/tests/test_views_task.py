@@ -259,7 +259,7 @@ class UpdateTaskTest(ExtTestCase):
 
 
 class MoveTaskTest(ExtTestCase):
-    def test_reverse_task_edit(self):
+    def test_reverse_task_move(self):
         self.assertEqual(reverse('tasks:task_move', args=['test_project', 'test_task', 'up']),
                          '/project/test_project/task/test_task/move/up/')
 
@@ -290,6 +290,28 @@ class MoveTaskTest(ExtTestCase):
         self.assertEqual(task_1.order, 2)
         self.assertEqual(task_2.order, 1)
         self.assertEqual(task_2.next, task_1)
+
+    def test_cant_move_task_if_not_logged_in(self):
+        creator = User.objects.create(username='creator')
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task_1 = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+        task_2 = Task.objects.create(project=project, created_by=creator, name="task_2", order=2)
+        self.assertEqual(task_1.next, task_2)
+        response = self.client.get(reverse('tasks:task_move', args=[project.name, task_1.name, 'down']), follow=True)
+        self.assertEqual(task_1.next, task_2)
+        self.assertTemplateUsed(response, '404.html')
+
+
+class UpdateTaskStatusTest(ExtTestCase):
+    def test_reverse_task_set_phase_to(self):
+        self.assertEqual(reverse('tasks:task_set_phase_to', args=['test_project', 'test_task', 'finished']),
+                         '/project/test_project/task/test_task/set_phase_to/finished/')
+
+    def test_phase_to_finished(self):
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task_1 = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+
 
 
 class DeleteTaskPageTest(ExtTestCase):

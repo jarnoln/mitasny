@@ -2,7 +2,7 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from .tasks_user import TasksUserList, TasksUserDetail, TasksUserRegister, TasksUserUpdate, TasksUserDelete
 from .project import ProjectList, ProjectListWeekly, ProjectDetail, ProjectWeekly, ProjectCreate, ProjectUpdate, ProjectDelete
-from .task import TaskList, TaskDetail, TaskCreate, TaskUpdate, TaskMove, TaskDelete
+from .task import TaskList, TaskDetail, TaskCreate, TaskUpdate, TaskMove, TaskSetPhaseTo, TaskDelete
 
 
 urlpatterns = [
@@ -13,7 +13,8 @@ urlpatterns = [
     url(r'^user/(?P<slug>[\w\.-]+)/$', TasksUserDetail.as_view(), name='user'),
     url(r'^project/create/$', login_required(ProjectCreate.as_view()), name='project_create'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/create/$', login_required(TaskCreate.as_view()), name='task_create'),
-    url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/move/(?P<dir>[\w\.-]+)/$', TaskMove.as_view(), name='task_move'),
+    url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/set_phase_to/(?P<phase>[\w\.-]+)/$', login_required(TaskSetPhaseTo.as_view()), name='task_set_phase_to'),
+    url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/move/(?P<dir>[\w\.-]+)/$', login_required(TaskMove.as_view()), name='task_move'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/edit/$', TaskUpdate.as_view(), name='task_update'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/delete/$', TaskDelete.as_view(), name='task_delete'),
     url(r'^project/(?P<project_name>[\w\.-]+)/task/(?P<slug>[\w\.-]+)/$', TaskDetail.as_view(), name='task'),

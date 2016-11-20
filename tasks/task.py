@@ -121,6 +121,19 @@ class TaskMove(View):
         return HttpResponseRedirect(project.get_absolute_url())
 
 
+class TaskSetPhaseTo(View):
+    def get(self, request, *args, **kwargs):
+        project = get_object_or_404(models.Project, name=kwargs['project_name'])
+        task = get_object_or_404(models.Task, name=kwargs['slug'])
+        target_phase = kwargs.get('phase', '')
+        # if direction == 'up':
+        #    result = task.move_up()
+        #    return HttpResponse('Moving up: %s' % str(result))
+        # elif direction == 'down':
+        #    task.move_down()
+        return HttpResponseRedirect(project.get_absolute_url())
+
+
 class TaskDelete(DeleteView):
     slug_field = 'name'
     model = models.Task
