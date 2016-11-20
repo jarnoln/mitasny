@@ -125,12 +125,20 @@ class TaskSetPhaseTo(View):
     def get(self, request, *args, **kwargs):
         project = get_object_or_404(models.Project, name=kwargs['project_name'])
         task = get_object_or_404(models.Task, name=kwargs['slug'])
-        target_phase = kwargs.get('phase', '')
-        # if direction == 'up':
-        #    result = task.move_up()
-        #    return HttpResponse('Moving up: %s' % str(result))
-        # elif direction == 'down':
-        #    task.move_down()
+        target_phase_name = kwargs.get('phase', '')
+        if not task.phase:
+            return HttpResponseRedirect(project.get_absolute_url())
+
+        if not target_phase_name:
+            return HttpResponseRedirect(project.get_absolute_url())
+
+        target_phase = get_object_or_404(models.Phase, name=target_phase_name)
+        if target_phase.name == 'finished':
+            if task.phase.name == 'ongoing' or target_phase_name == 'continuing':
+                task.phase = target_phase
+                task.save()
+                return HttpResponseRedirect(project.get_absolute_url())
+
         return HttpResponseRedirect(project.get_absolute_url())
 
 

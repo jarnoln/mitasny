@@ -308,10 +308,20 @@ class UpdateTaskStatusTest(ExtTestCase):
                          '/project/test_project/task/test_task/set_phase_to/finished/')
 
     def test_phase_to_finished(self):
+        self.create_default_phases()
+        phase_ongoing = Phase.objects.get(name='ongoing')
+        phase_finished = Phase.objects.get(name='finished')
         creator = self.create_and_log_in_user()
         project = Project.objects.create(created_by=creator, name="test_project")
-        task_1 = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
-
+        task = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+        task.phase = phase_ongoing
+        task.save()
+        self.assertEqual(task.phase.name, 'ongoing')
+        response = self.client.get(reverse('tasks:task_set_phase_to', args=[project.name, task.name, phase_finished.name]),
+                                   follow=True)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        task = Task.objects.first()
+        self.assertEqual(task.phase.name, 'finished')
 
 
 class DeleteTaskPageTest(ExtTestCase):
