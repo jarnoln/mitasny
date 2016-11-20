@@ -99,9 +99,9 @@ class UserRegisterTest(TestCase):
         self.assertEqual(auth.models.User.objects.count(), 1)
         user = auth.models.User.objects.all()[0]
         self.assertEqual(user.username, 'testuser')
-        self.assertTemplateUsed(response, 'tasks/project_list.html')
         self.assertTrue(response.context['user'].is_authenticated())
         self.assertEqual(response.context['user'], user)
+        self.assertTemplateUsed(response, 'auth/user_form.html')
 
 
 class UpdateUserTest(ExtTestCase):

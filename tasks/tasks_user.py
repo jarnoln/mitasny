@@ -42,7 +42,7 @@ class TasksUserDetail(DetailView):
 class TasksUserRegister(FormView):
     template_name = 'registration/register.html'
     form_class = auth.forms.UserCreationForm
-    success_url = reverse_lazy('tasks:projects')
+    # success_url = reverse_lazy('tasks:projects')
     # slug_field = 'username'
 
     def get_context_data(self, **kwargs):
@@ -57,6 +57,12 @@ class TasksUserRegister(FormView):
         authenticated_user = auth.authenticate(username=user.username, password=cd['password1'])
         auth.login(self.request, authenticated_user)
         return super(TasksUserRegister, self).form_valid(form)
+
+    def get_success_url(self):
+        if self.request.user:
+            return reverse_lazy('tasks:user_update', args=[self.request.user.username])
+        else:
+            return reverse('tasks:users')
 
 
 class TasksUserUpdate(UpdateView):

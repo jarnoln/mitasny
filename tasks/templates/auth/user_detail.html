@@ -20,12 +20,12 @@
         </tr>
 {% if can_edit %}
         <tr>
-            <td> &nbsp; </td>
             <td>
                 <a class="btn btn-primary" href="{% url 'tasks:user_update' user.username %}">
                     {% trans 'Edit' %}
                 </a>
             </td>
+            <td> &nbsp; </td>
         </tr>
 {% endif %}
     </table>
