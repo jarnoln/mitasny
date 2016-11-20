@@ -122,12 +122,17 @@ class UpdateUserTest(ExtTestCase):
 
     def test_can_update_user(self):
         user = self.create_and_log_in_user()
-        response = self.client.post(reverse('tasks:user_update', args=[user.username]),
-                                    {'username': 'batman', 'email': 'bruce@waynetech.com' },
-                                    follow=True)
+        response = self.client.post(reverse('tasks:user_update', args=[user.username]), {
+            'username': 'batman',
+            'email': 'bruce@waynetech.com',
+            'first_name': 'Bruce',
+            'last_name': 'Wayne'
+        }, follow=True)
         self.assertEqual(auth.models.User.objects.all().count(), 1)
         user = auth.models.User.objects.all()[0]
         self.assertEqual(user.email, 'bruce@waynetech.com')
+        self.assertEqual(user.first_name, 'Bruce')
+        self.assertEqual(user.last_name, 'Wayne')
         self.assertTemplateUsed(response, 'auth/user_detail.html')
 
     def test_cant_update_user_if_not_logged_in(self):

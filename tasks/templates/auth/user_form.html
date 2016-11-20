@@ -20,6 +20,16 @@
         <td> {{ form.email.help_text }} </td>
     </tr>
     <tr>
+        <th class="nowrap"> {{ form.first_name.label_tag }} </th>
+        <td> {{ form.first_name }} </td>
+        <td> {{ form.first_name.help_text }} </td>
+    </tr>
+    <tr>
+        <th class="nowrap"> {{ form.last_name.label_tag }} </th>
+        <td> {{ form.last_name }} </td>
+        <td> {{ form.last_name.help_text }} </td>
+    </tr>
+    <tr>
         <td colspan="2">
             <input type="submit" id="id_button_login" class="btn btn-primary" value="{% trans 'Save' %}" />
         </td>

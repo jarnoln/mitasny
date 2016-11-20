@@ -1,20 +1,31 @@
 {% extends "tasks/tasks_base.html" %}
+{% load i18n %}
+
 {% block title %} {{ user.username }} {% endblock %}
+
 {% block content %}
     <h1> {{ user.username }} </h1>
     <table class="table">
         <tr>
-            <th> Name </th>
-            <td> {{ user.username }} </td>
+            <th> {% trans 'Email' %} </th>
+            <td> {{ user.email }} </td>
         </tr>
         <tr>
-            <th> Email </th>
-            <td> {{ user.email }} </td>
+            <th> {% trans 'First name' %} </th>
+            <td> {{ user.first_name }} </td>
+        </tr>
+        <tr>
+            <th> {% trans 'Last name' %} </th>
+            <td> {{ user.last_name }} </td>
         </tr>
 {% if can_edit %}
         <tr>
             <td> &nbsp; </td>
-            <td> <a class="btn btn-primary" href="{% url 'tasks:user_update' user.username %}"> Edit </a></td>
+            <td>
+                <a class="btn btn-primary" href="{% url 'tasks:user_update' user.username %}">
+                    {% trans 'Edit' %}
+                </a>
+            </td>
         </tr>
 {% endif %}
     </table>

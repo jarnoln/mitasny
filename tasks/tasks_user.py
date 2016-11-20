@@ -62,7 +62,7 @@ class TasksUserRegister(FormView):
 class TasksUserUpdate(UpdateView):
     model = auth.models.User
     slug_field = 'username'
-    fields = ['username', 'email']
+    fields = ['username', 'email', 'first_name', 'last_name']
 
     def get_object(self):
         target_user = super(TasksUserUpdate, self).get_object()
