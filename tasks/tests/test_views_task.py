@@ -182,7 +182,7 @@ class CreateTaskTest(ExtTestCase):
 class UpdateTaskTest(ExtTestCase):
     def test_reverse_task_edit(self):
         self.assertEqual(reverse('tasks:task_update', args=['test_project', 'test_task']),
-                         '/project/test_project/task/test_task/update/')
+                         '/project/test_project/task/test_task/edit/')
 
     def test_get_edit_url(self):
         creator = self.create_and_log_in_user()

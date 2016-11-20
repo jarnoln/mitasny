@@ -186,7 +186,7 @@ class CreateProjectTest(ExtTestCase):
 class UpdateProjectTest(ExtTestCase):
     def test_reverse_task_edit(self):
         self.assertEqual(reverse('tasks:project_update', args=['test_project']),
-                         '/project/test_project/update/')
+                         '/project/test_project/edit/')
 
     def test_uses_correct_template(self):
         creator = self.create_and_log_in_user()
