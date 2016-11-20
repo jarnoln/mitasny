@@ -313,7 +313,7 @@ class UpdateTaskStatusTest(ExtTestCase):
         phase_finished = Phase.objects.get(name='finished')
         creator = self.create_and_log_in_user()
         project = Project.objects.create(created_by=creator, name="test_project")
-        task = Task.objects.create(project=project, created_by=creator, name="task_1", order=1)
+        task = Task.objects.create(project=project, created_by=creator, name="task_1", order=1, work_left=5)
         task.phase = phase_ongoing
         task.save()
         self.assertEqual(task.phase.name, 'ongoing')
@@ -322,6 +322,7 @@ class UpdateTaskStatusTest(ExtTestCase):
         self.assertTemplateUsed(response, 'tasks/project_detail.html')
         task = Task.objects.first()
         self.assertEqual(task.phase.name, 'finished')
+        self.assertEqual(task.work_left, 0)
 
 
 class DeleteTaskPageTest(ExtTestCase):
