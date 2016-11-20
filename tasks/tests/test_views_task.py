@@ -307,7 +307,23 @@ class UpdateTaskStatusTest(ExtTestCase):
         self.assertEqual(reverse('tasks:task_set_phase_to', args=['test_project', 'test_task', 'finished']),
                          '/project/test_project/task/test_task/set_phase_to/finished/')
 
-    def test_phase_to_finished(self):
+    def test_set_phase_to_ongoing(self):
+        self.create_default_phases()
+        phase_pending = Phase.objects.get(name='pending')
+        phase_ongoing = Phase.objects.get(name='ongoing')
+        creator = self.create_and_log_in_user()
+        project = Project.objects.create(created_by=creator, name="test_project")
+        task = Task.objects.create(project=project, created_by=creator, name="task_1", order=1, work_left=5,
+                                   phase=phase_pending)
+        self.assertEqual(task.phase.name, 'pending')
+        response = self.client.get(reverse('tasks:task_set_phase_to', args=[project.name, task.name, phase_ongoing.name]),
+                                   follow=True)
+        self.assertTemplateUsed(response, 'tasks/project_detail.html')
+        task = Task.objects.first()
+        self.assertEqual(task.phase.name, 'ongoing')
+        self.assertEqual(task.work_left, 5)
+
+    def test_set_phase_to_finished(self):
         self.create_default_phases()
         phase_ongoing = Phase.objects.get(name='ongoing')
         phase_finished = Phase.objects.get(name='finished')

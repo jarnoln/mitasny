@@ -251,10 +251,13 @@ class Task(models.Model):
     @property
     def next_phase_url(self):
         if self.phase:
-            if self.phase.name == 'ongoing' or self.phase.name == 'continuing':
+            if self.phase.name == 'pending':
+                url = reverse('tasks:task_set_phase_to', args=[self.project.name, self.name, 'ongoing'])
+                return { 'title': 'Start', 'url': url}
+            elif self.phase.name == 'ongoing' or self.phase.name == 'continuing':
                 url = reverse('tasks:task_set_phase_to', args=[self.project.name, self.name, 'finished'])
                 return { 'title': 'Finish', 'url': url}
-        return ''
+        return None
 
     def can_edit(self, user):
         if user == self.created_by or user == self.owner or user == self.project.created_by:
