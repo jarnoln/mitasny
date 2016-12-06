@@ -163,7 +163,7 @@ class CreateProjectTest(ExtTestCase):
 
     def test_can_create_new_project(self):
         self.assertEqual(Project.objects.all().count(), 0)
-        self.create_and_log_in_user()
+        creator = self.create_and_log_in_user()
         response = self.client.post(reverse('tasks:project_create'), {
             'name': 'test_project',
             'title': 'Test project',
@@ -172,6 +172,7 @@ class CreateProjectTest(ExtTestCase):
         self.assertEqual(response.context['project'].name, 'test_project')
         self.assertEqual(response.context['project'].title, 'Test project')
         self.assertEqual(response.context['project'].description, 'For testing')
+        self.assertEqual(response.context['project'].created_by, creator)
 
     def test_cant_create_project_if_not_logged_in(self):
         response = self.client.get(reverse('tasks:project_create'), follow=True)
@@ -262,6 +263,16 @@ class DeleteProjectPageTest(ExtTestCase):
         creator = User.objects.create(username='creator')
         Project.objects.create(created_by=creator, name="test_project", title="Test project", description="Testing")
         self.assertEqual(Project.objects.all().count(), 1)
+        response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
+        self.assertEqual(Project.objects.all().count(), 1)
+        self.assertTemplateUsed(response, '404.html')
+
+    def test_cant_delete_project_if_not_creator(self):
+        creator = User.objects.create(username='creator')
+        Project.objects.create(created_by=creator, name="test_project", title="Test project",
+                                    description="Testing")
+        self.assertEqual(Project.objects.all().count(), 1)
+        user = self.create_and_log_in_user()
         response = self.client.post(reverse('tasks:project_delete', args=['test_project']), {}, follow=True)
         self.assertEqual(Project.objects.all().count(), 1)
         self.assertTemplateUsed(response, '404.html')

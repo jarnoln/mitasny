@@ -100,6 +100,7 @@ class CreateTaskTest(ExtTestCase):
         self.assertEqual(task.work_left, 5)
         self.assertEqual(task.order, 0)
         self.assertEqual(task.phase, None)
+        self.assertEqual(task.created_by, creator)
         self.assertTemplateUsed(response, 'tasks/project_detail.html')
 
     def test_order_increases_with_task_count(self):
