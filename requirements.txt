@@ -3,5 +3,7 @@ Unipath==1.1
 argparse==1.2.1
 codecov==2.0.5
 coverage==4.2
+ecdsa==0.13
+gunicorn==19.7.0
 requests==2.11.1
 wsgiref==0.1.2

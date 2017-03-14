@@ -10,4 +10,3 @@ ExecStart=/home/django/sites/mitasny.com/virtualenv/bin/gunicorn --bind unix:/tm
 
 [Install]
 WantedBy=multi-user.target
-

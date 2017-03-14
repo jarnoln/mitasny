@@ -13,21 +13,22 @@ SITE_NAME = 'mitasny.com'  # Not yet the actual server name
 
 
 def deploy():
-    # site_folder = '/home/%s/sites/%s' % (env.user, env.host)
+    site_folder = '/home/%s/sites/%s' % (env.user, env.host)
     site_folder = '/home/%s/sites/%s' % (env.user, SITE_NAME)
     source_folder = site_folder + '/source'
     virtualenv = site_folder + '/virtualenv'
     python = virtualenv + '/bin/python'
     pip = virtualenv + '/bin/pip'
     app_list = ['tasks']
-    _run_local_unit_tests(app_list)
+    # _run_local_unit_tests(app_list)
     _init_virtualenv(site_folder)
     _get_latest_source(source_folder)
     _update_python_libraries(source_folder, pip)
     _check_secret_key(source_folder, python)
     _update_database(source_folder, python)
     _run_remote_unit_tests(app_list, source_folder, python)
-    _restart_apache()
+    # _restart_apache()
+    _restart_nginx()
 
 
 def _init_virtualenv(site_folder):
@@ -80,3 +81,8 @@ def _run_remote_unit_tests(app_list, source_folder, python):
 
 def _restart_apache():
     sudo('service apache2 restart')
+
+
+def _restart_nginx():
+    sudo('systemctl restart mitasny.gunicorn')
+    sudo('service nginx restart')
