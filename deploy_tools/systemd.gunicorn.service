@@ -1,0 +1,13 @@
+[Unit]
+Description=Mitasny Gunicorn daemon
+After=network.target
+
+[Service]
+User=django
+Group=django
+WorkingDirectory=/home/django/sites/mitasny.com/source
+ExecStart=/home/django/sites/mitasny.com/virtualenv/bin/gunicorn --bind unix:/tmp/mitasny.socket mitasny.wsgi:application --workers 3
+
+[Install]
+WantedBy=multi-user.target
+
