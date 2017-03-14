@@ -27,9 +27,9 @@ SOURCE_ROOT = PROJECT_ROOT.parent
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mitasny.com', 'www.mitasny.com', 'mitasny.luomanirva.net']
 
 
 # Application definition
