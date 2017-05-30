@@ -1,20 +1,29 @@
 # Usage:
 # Localhost:
-# fab -f deploy_tools/fabfile.py provision:host=username@localhost
 # fab -f deploy_tools/fabfile.py deploy:host=username@localhost
+# Live:
+# fab -f deploy_tools/fabfile.py deploy:host=django@mitasny.com
 
-import time
-from fabric.contrib.files import append, exists, sed
-from fabric.api import env, local, run, settings, abort, sudo
+from fabric.contrib.files import exists
+from fabric.api import env, local, run, sudo
+from fabric.network import ssh
 
 
 REPO_URL = 'https://github.com/jarnoln/mitasny.git'
-SITE_NAME = 'mitasny.com'  # Not yet the actual server name
+LOCAL_SITE_NAME = 'local.mitasny.com'  # Not yet the actual server name
+ssh.util.log_to_file('fabric_ssh.log')
+
+
+def get_site_name():
+    if env.host == 'localhost' or env.host == '127.0.0.1':
+        return LOCAL_SITE_NAME
+    else:
+        return env.host
 
 
 def deploy():
-    site_folder = '/home/%s/sites/%s' % (env.user, env.host)
-    site_folder = '/home/%s/sites/%s' % (env.user, SITE_NAME)
+    site_name = get_site_name()
+    site_folder = '/home/%s/sites/%s' % (env.user, site_name)
     source_folder = site_folder + '/source'
     virtualenv = site_folder + '/virtualenv'
     python = virtualenv + '/bin/python'
@@ -28,7 +37,7 @@ def deploy():
     _update_database(source_folder, python)
     _run_remote_unit_tests(app_list, source_folder, python)
     # _restart_apache()
-    _restart_nginx()
+    _restart_nginx(site_name)
 
 
 def _init_virtualenv(site_folder):
@@ -83,6 +92,6 @@ def _restart_apache():
     sudo('service apache2 restart')
 
 
-def _restart_nginx():
-    sudo('systemctl restart mitasny.gunicorn')
+def _restart_nginx(site_name):
+    sudo('systemctl restart %s.gunicorn' % site_name)
     sudo('service nginx restart')
