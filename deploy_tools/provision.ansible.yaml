@@ -1,0 +1,30 @@
+- hosts: all
+
+  vars:
+      host: "{{ inventory_hostname }}"
+
+  tasks:
+
+    - name: make sure required packages are installed
+      apt: pkg=nginx,git,virtualenv state=present
+
+    - name: add nginx config to sites-available
+      template: src=./nginx.conf dest=/etc/nginx/sites-available/{{ host }}
+      notify:
+          - restart nginx
+
+    - name: write gunicorn service script
+      template: src=./systemd.gunicorn.service dest=/etc/systemd/system/{{ host }}.gunicorn.service
+      notify:
+          - restart gunicorn
+
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
+
+    - name: restart gunicorn
+      systemd:
+          name={{ host }}.gunicorn
+          daemon_reload=yes
+          enabled=yes
+          state=restarted

@@ -1,10 +1,12 @@
 [Unit]
-Description=Mitasny Gunicorn daemon
+Description=Gunicorn server for {{ host }}
 After=network.target
 
 [Service]
-User=django
-Group=django
-WorkingDirectory=/home/django/sites/mitasny.com/source
-ExecStart=/home/django/sites/mitasny.com/virtualenv/bin/gunicorn --bind unix:/tmp/mitasny.socket mitasny.wsgi:application --workers 2
+User={{ ansible_ssh_user }}
+Group={{ ansible_ssh_user }}
+WorkingDirectory=/home/{{ ansible_ssh_user }}/sites/{{ host }}/source
+ExecStart=/home/{{ ansible_ssh_user }}/sites/{{ host }}/virtualenv/bin/gunicorn --bind unix:/tmp/{{ host }}.socket mitasny.wsgi:application --workers 2
+
+[Install]
 WantedBy=multi-user.target
