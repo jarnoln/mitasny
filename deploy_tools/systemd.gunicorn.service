@@ -6,7 +6,5 @@ After=network.target
 User=django
 Group=django
 WorkingDirectory=/home/django/sites/mitasny.com/source
-ExecStart=/home/django/sites/mitasny.com/virtualenv/bin/gunicorn --bind unix:/tmp/mitasny.socket mitasny.wsgi:application --workers 3
-
-[Install]
+ExecStart=/home/django/sites/mitasny.com/virtualenv/bin/gunicorn --bind unix:/tmp/mitasny.socket mitasny.wsgi:application --workers 2
 WantedBy=multi-user.target
