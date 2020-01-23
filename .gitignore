@@ -1,4 +1,4 @@
-secret_key.py
+passwords.py
 migrations
 db.sqlite3
 .idea
