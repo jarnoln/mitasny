@@ -10,7 +10,7 @@ install:
   - pip install codecov
 
 before_script:
-  - python mitasny/generate_secret.py > mitasny/secret_key.py
+  - python mitasny/generate_passwords.py mitasny/passwords.py
   - python manage.py makemigrations
   - python manage.py makemigrations tasks
   - python manage.py migrate
