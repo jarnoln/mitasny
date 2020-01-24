@@ -1,5 +1,5 @@
 from django.contrib import admin
-import models
+from tasks import models
 
 admin.site.register(models.Project)
 admin.site.register(models.Priority)

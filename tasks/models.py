@@ -3,7 +3,7 @@ from django.db import models
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
-from calculate_finish_date import calculate_finish_date
+from .calculate_finish_date import calculate_finish_date
 
 
 class Project(models.Model):
@@ -50,13 +50,13 @@ class Project(models.Model):
     @property
     def total_work_left_string(self):
         days = self.total_work_left
-        weeks = days / 5
+        weeks = int(days / 5)
         days = days % 5
-        months = weeks / 4
+        months = int(weeks / 4)
         weeks = weeks % 4
-        if months:
+        if months > 0:
             return '%d month(s), %d week(s), %d day(s)' % (months, weeks, days)
-        elif weeks:
+        elif weeks > 0:
             return '%d week(s), %d day(s)' % (weeks, days)
         else:
             return '%d day(s)' % days
@@ -132,7 +132,7 @@ class Project(models.Model):
         tasks = Task.objects.filter(project=self).filter(ongoing_or_continuing)
         return tasks
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     def get_absolute_url(self):
@@ -165,7 +165,7 @@ class Phase(models.Model):
     order = models.PositiveSmallIntegerField(default=0)
     element_class = models.CharField(default='', blank=True, max_length=250)  # CSS class to be used in HTML
 
-    def __unicode__(self):
+    def __str__(self):
         # return '%d:%s:%s' % (self.order, self.name, self.title)
         return self.title
 
@@ -194,7 +194,10 @@ class Task(models.Model):
     @property
     def work_left_list(self):
         """ List with as many items as days of work left. For loopiing in templates """
-        return range(0, self.work_left)
+        if self.work_left > 0:
+            return range(0, self.work_left)
+        else:
+            return []
 
     @property
     def cumulative_work_before(self):
@@ -209,8 +212,11 @@ class Task(models.Model):
 
     @property
     def cumulative_work_before_list(self):
-        """ List with as many items as days of work left. For loopiing in templates """
-        return range(0, self.cumulative_work_before)
+        """ List with as many items as days of work left. For looping in templates """
+        if self.cumulative_work_before > 0:
+            return range(0, self.cumulative_work_before)
+        else:
+            return []
 
     @property
     def cumulative_work_left(self):
@@ -297,7 +303,7 @@ class Task(models.Model):
         self.switch_with(next_task)
         return True
 
-    def __unicode__(self):
+    def __str__(self):
         return '%s:%s' % (self.project.name, self.name)
 
     def get_absolute_url(self):

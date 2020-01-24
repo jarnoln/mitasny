@@ -5,7 +5,7 @@ from django.views.generic import ListView, DetailView, TemplateView, View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.http import HttpResponse, HttpResponseRedirect, Http404
 from django.utils.text import slugify
-import models
+from tasks import models
 
 
 class TaskList(ListView):
