@@ -1,9 +1,5 @@
-Django==1.8.14
-Unipath==1.1
-argparse==1.2.1
-codecov==2.0.5
-coverage==4.2
-ecdsa==0.13
-gunicorn==19.7.0
+Django==1.8.19
+codecov==2.0.15
+gunicorn==20.0.4
 requests==2.11.1
 wsgiref==0.1.2
