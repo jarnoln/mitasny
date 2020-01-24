@@ -6,6 +6,8 @@ dist: xenial
 
 install:
   - pip install -r requirements.txt
+  - pip install coverage
+  - pip install codecov
 
 before_script:
   - python mitasny/generate_secret.py > mitasny/secret_key.py
