@@ -11,25 +11,31 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-from unipath import Path
+import sys
+
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+SETTINGS_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE_DIR = os.path.dirname(SETTINGS_DIR)
+SITE_DIR = os.path.dirname(BASE_DIR)
+PROJECT_NAME = os.path.basename(SETTINGS_DIR)
 
 # If secret_key.py does not exist, create it like this:
 # python generate_secret.py > secret_key.py
-from .secret_key import SECRET_KEY
-
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SETTINGS_ROOT = Path(__file__).parent
-PROJECT_ROOT = SETTINGS_ROOT.parent
-SOURCE_ROOT = PROJECT_ROOT.parent
+try:
+    from .passwords import SECRET_KEY
+except ImportError:
+    print('Password file does not exist. How to create it:')
+    print('python {}/generate_passwords.py {}/passwords.py'.format(PROJECT_NAME, PROJECT_NAME))
+    sys.exit(1)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.10/howto/deployment/checklist/
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['mitasny.com', 'www.mitasny.com', 'mitasny.luomanirva.net']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'mitasny.com', 'www.mitasny.com', 'mitasny.luomanirva.net']
 
 
 # Application definition
@@ -82,7 +88,7 @@ WSGI_APPLICATION = 'mitasny.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(SOURCE_ROOT, 'db/mitasdb.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
 
@@ -123,7 +129,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-    os.path.join(PROJECT_ROOT, 'static'),
+    os.path.join(SITE_DIR, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
