@@ -17,7 +17,7 @@ def can_edit_user(logged_user, target_user):
 
 
 class TasksUserList(ListView):
-    model = auth.models.User
+    model = auth.get_user_model()
 
     def get_context_data(self, **kwargs):
         context = super(TasksUserList, self).get_context_data(**kwargs)
@@ -26,7 +26,7 @@ class TasksUserList(ListView):
 
 
 class TasksUserDetail(DetailView):
-    model = auth.models.User
+    model = auth.get_user_model()
     slug_field = 'username'
     fields = ['username', 'first_name', 'last_name', 'email']
     context_object_name = 'user'
@@ -66,7 +66,7 @@ class TasksUserRegister(FormView):
 
 
 class TasksUserUpdate(UpdateView):
-    model = auth.models.User
+    model = auth.get_user_model()
     slug_field = 'username'
     fields = ['username', 'email', 'first_name', 'last_name']
 
@@ -92,7 +92,7 @@ class TasksUserUpdate(UpdateView):
 
 class TasksUserDelete(DeleteView):
     slug_field = 'username'
-    model = auth.models.User
+    model = auth.get_user_model()
     success_url = reverse_lazy('tasks:projects')
 
     def get_object(self):

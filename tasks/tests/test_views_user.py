@@ -91,13 +91,14 @@ class UserRegisterTest(TestCase):
         self.assertTemplateUsed(response, 'registration/register.html')
 
     def test_register_user(self):
-        self.assertEqual(auth.models.User.objects.count(), 0)
+        user_model = auth.get_user_model()
+        self.assertEqual(user_model.objects.count(), 0)
         response = self.client.post(reverse('tasks:register'), data={
             'username': 'testuser',
-            'password1': 'pass',
-            'password2': 'pass'}, follow=True)
-        self.assertEqual(auth.models.User.objects.count(), 1)
-        user = auth.models.User.objects.all()[0]
+            'password1': 'password123',
+            'password2': 'password123'}, follow=True)
+        self.assertEqual(user_model.objects.count(), 1)
+        user = user_model.objects.all()[0]
         self.assertEqual(user.username, 'testuser')
         self.assertTrue(response.context['user'].is_authenticated())
         self.assertEqual(response.context['user'], user)
