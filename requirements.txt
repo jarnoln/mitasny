@@ -1,5 +1,5 @@
 Django==1.8.19
 codecov==2.0.15
 gunicorn==20.0.4
-requests==2.11.1
+requests==2.20.0
 wsgiref==0.1.2
