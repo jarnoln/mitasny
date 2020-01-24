@@ -1,20 +1,22 @@
 language: python
-  - "2.7"
+  - "3.6"
 
 sudo: required
-dist: trusty
+dist: xenial
 
 install:
   - pip install -r requirements.txt
 
 before_script:
   - python mitasny/generate_secret.py > mitasny/secret_key.py
-  - mkdir ../db
   - python manage.py makemigrations
+  - python manage.py makemigrations tasks
   - python manage.py migrate
+  - python manage.py migrate tasks
 
 script:
-  - coverage run --source='./tasks' manage.py test tasks
+  - coverage run --source='./tasks' manage.py test tasks -v2
+  - coverage report
 
 after_success:
   - codecov
