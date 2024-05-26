@@ -1,10 +1,8 @@
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import UpdateView, DeleteView, FormView
-from django.http import HttpResponse, HttpResponseRedirect, Http404
-# from django.contrib.auth.models import User
+from django.http import Http404
 from django.contrib import auth
-# from django.contrib.auth.forms import UserCreationForm
 
 
 def can_edit_user(logged_user, target_user):

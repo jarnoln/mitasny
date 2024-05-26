@@ -1,7 +1,7 @@
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.http import HttpResponse, HttpResponseRedirect, Http404
+from django.http import Http404
 from .models import Project
 from .check_validity import check_validity
 

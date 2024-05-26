@@ -1,5 +1,5 @@
 from django.test import TestCase
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib import auth
 from .ext_test_case import ExtTestCase
 
@@ -95,8 +95,8 @@ class UserRegisterTest(TestCase):
         self.assertEqual(user_model.objects.count(), 0)
         response = self.client.post(reverse('tasks:register'), data={
             'username': 'testuser',
-            'password1': 'password123',
-            'password2': 'password123'}, follow=True)
+            'password1': 'Tesseract123!',
+            'password2': 'Tesseract123!'}, follow=True)
         self.assertEqual(user_model.objects.count(), 1)
         user = user_model.objects.all()[0]
         self.assertEqual(user.username, 'testuser')

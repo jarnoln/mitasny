@@ -1,7 +1,7 @@
 import datetime
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse, reverse_lazy
+from django.urls import reverse
 from .ext_test_case import ExtTestCase
 from tasks.models import Project, Priority, TaskStatus, Phase, Task
 

@@ -1,6 +1,6 @@
 import datetime
 from django.db import models
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy
 from django.contrib.auth.models import User
 from .calculate_finish_date import calculate_finish_date
@@ -12,9 +12,9 @@ class Project(models.Model):
     title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='created_projects')
+    created_by = models.ForeignKey(User, related_name='created_projects', on_delete=models.CASCADE)
     edited = models.DateTimeField(auto_now=True)
-    edited_by = models.ForeignKey(User, null=True, related_name='edited_projects')
+    edited_by = models.ForeignKey(User, null=True, related_name='edited_projects', on_delete=models.CASCADE)
 
     @property
     def total_work_left(self):
@@ -174,26 +174,26 @@ class Phase(models.Model):
 
 
 class Task(models.Model):
-    project = models.ForeignKey(Project, null=False, related_name='tasks')
+    project = models.ForeignKey(Project, null=False, related_name='tasks', on_delete=models.CASCADE)
     name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
                             help_text=ugettext_lazy('Must be unique. Used in URL.'))
     title = models.CharField(max_length=250, verbose_name=ugettext_lazy('task'))
     description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
-    priority = models.ForeignKey(Priority, null=True)
-    phase = models.ForeignKey(Phase, null=True, blank=True)
+    priority = models.ForeignKey(Priority, null=True, on_delete=models.CASCADE)
+    phase = models.ForeignKey(Phase, null=True, blank=True, on_delete=models.CASCADE)
     # status = models.ForeignKey(TaskStatus, null=True)
-    owner = models.ForeignKey(User, null=True, related_name='tasks')
+    owner = models.ForeignKey(User, null=True, related_name='tasks', on_delete=models.CASCADE)
     work_done = models.PositiveSmallIntegerField(default=0)
-    work_left = models.PositiveSmallIntegerField(default=1) #, help_text=ugettext_lazy('days'))
+    work_left = models.PositiveSmallIntegerField(default=1)
     created = models.DateTimeField(auto_now_add=True)
-    created_by = models.ForeignKey(User, related_name='created_tasks')
+    created_by = models.ForeignKey(User, related_name='created_tasks', on_delete=models.CASCADE)
     edited = models.DateTimeField(auto_now=True)
-    edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks')
+    edited_by = models.ForeignKey(User, null=True, related_name='edited_tasks', on_delete=models.CASCADE)
 
     @property
     def work_left_list(self):
-        """ List with as many items as days of work left. For loopiing in templates """
+        """ List with as many items as days of work left. For looping in templates """
         if self.work_left > 0:
             return range(0, self.work_left)
         else:

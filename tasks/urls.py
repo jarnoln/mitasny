@@ -4,6 +4,7 @@ from .tasks_user import TasksUserList, TasksUserDetail, TasksUserRegister, Tasks
 from .project import ProjectList, ProjectListWeekly, ProjectDetail, ProjectWeekly, ProjectCreate, ProjectUpdate, ProjectDelete
 from .task import TaskList, TaskDetail, TaskCreate, TaskUpdate, TaskMove, TaskSetPhaseTo, TaskDelete
 
+app_name = 'tasks'
 
 urlpatterns = [
     url(r'^$', ProjectList.as_view(), name='home'),
