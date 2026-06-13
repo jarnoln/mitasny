@@ -57,7 +57,7 @@ class UserLoginLogoutTest(TestCase):
         user.set_password('pw')
         user.save()
         response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)
         self.assertEqual(response.context['user'], user)
         self.assertTemplateUsed(response, 'tasks/project_list.html')
 
@@ -66,9 +66,9 @@ class UserLoginLogoutTest(TestCase):
         user.set_password('pw')
         user.save()
         response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)
         response = self.client.get(reverse('logout'))
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertFalse(response.context['user'].is_authenticated)
         self.assertTemplateUsed(response, 'registration/logged_out.html')
 
     def test_logout_redirect(self):
@@ -76,9 +76,9 @@ class UserLoginLogoutTest(TestCase):
         user.set_password('pw')
         user.save()
         response = self.client.post(reverse('login'), {'username': user.username, 'password': 'pw', 'next': reverse('tasks:home')}, follow=True)
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)
         response = self.client.get(reverse('logout') + '?next=' + reverse('tasks:projects'), follow=True)
-        self.assertFalse(response.context['user'].is_authenticated())
+        self.assertFalse(response.context['user'].is_authenticated)
         self.assertTemplateUsed(response, 'tasks/project_list.html')
 
 
@@ -100,7 +100,7 @@ class UserRegisterTest(TestCase):
         self.assertEqual(user_model.objects.count(), 1)
         user = user_model.objects.all()[0]
         self.assertEqual(user.username, 'testuser')
-        self.assertTrue(response.context['user'].is_authenticated())
+        self.assertTrue(response.context['user'].is_authenticated)
         self.assertEqual(response.context['user'], user)
         self.assertTemplateUsed(response, 'auth/user_form.html')
 
