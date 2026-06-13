@@ -1,16 +1,16 @@
 import datetime
 from django.db import models
 from django.urls import reverse
-from django.utils.translation import ugettext_lazy
+from django.utils.translation import gettext_lazy
 from django.contrib.auth.models import User
 from .calculate_finish_date import calculate_finish_date
 
 
 class Project(models.Model):
-    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
-                            help_text=ugettext_lazy('Must be unique. Used in URL.'))
-    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
-    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    name = models.SlugField(max_length=100, unique=True, verbose_name=gettext_lazy('name'),
+                            help_text=gettext_lazy('Must be unique. Used in URL.'))
+    title = models.CharField(max_length=250, verbose_name=gettext_lazy('title'))
+    description = models.TextField(null=True, blank=True, verbose_name=gettext_lazy('description'))
     created = models.DateTimeField(auto_now_add=True)
     created_by = models.ForeignKey(User, related_name='created_projects', on_delete=models.CASCADE)
     edited = models.DateTimeField(auto_now=True)
@@ -141,27 +141,27 @@ class Project(models.Model):
 
 class Priority(models.Model):
     # Idea, Nice(to have), Minor, Normal, Major, Critical
-    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
-                            help_text=ugettext_lazy('Must be unique. Used in URLs.'))
-    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
-    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    name = models.SlugField(max_length=100, unique=True, verbose_name=gettext_lazy('name'),
+                            help_text=gettext_lazy('Must be unique. Used in URLs.'))
+    title = models.CharField(max_length=250, verbose_name=gettext_lazy('title'))
+    description = models.TextField(null=True, blank=True, verbose_name=gettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
 
 
 class TaskStatus(models.Model):
-    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
-                            help_text=ugettext_lazy('Must be unique. Used in URLs.'))
-    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
-    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    name = models.SlugField(max_length=100, unique=True, verbose_name=gettext_lazy('name'),
+                            help_text=gettext_lazy('Must be unique. Used in URLs.'))
+    title = models.CharField(max_length=250, verbose_name=gettext_lazy('title'))
+    description = models.TextField(null=True, blank=True, verbose_name=gettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
 
 
 class Phase(models.Model):
     # Blocked, Pending, Ongoing, (Recently)Finished, Done
-    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
-                            help_text=ugettext_lazy('Must be unique. Used in URLs.'))
-    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('title'))
-    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    name = models.SlugField(max_length=100, unique=True, verbose_name=gettext_lazy('name'),
+                            help_text=gettext_lazy('Must be unique. Used in URLs.'))
+    title = models.CharField(max_length=250, verbose_name=gettext_lazy('title'))
+    description = models.TextField(null=True, blank=True, verbose_name=gettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
     element_class = models.CharField(default='', blank=True, max_length=250)  # CSS class to be used in HTML
 
@@ -175,10 +175,10 @@ class Phase(models.Model):
 
 class Task(models.Model):
     project = models.ForeignKey(Project, null=False, related_name='tasks', on_delete=models.CASCADE)
-    name = models.SlugField(max_length=100, unique=True, verbose_name=ugettext_lazy('name'),
-                            help_text=ugettext_lazy('Must be unique. Used in URL.'))
-    title = models.CharField(max_length=250, verbose_name=ugettext_lazy('task'))
-    description = models.TextField(null=True, blank=True, verbose_name=ugettext_lazy('description'))
+    name = models.SlugField(max_length=100, unique=True, verbose_name=gettext_lazy('name'),
+                            help_text=gettext_lazy('Must be unique. Used in URL.'))
+    title = models.CharField(max_length=250, verbose_name=gettext_lazy('task'))
+    description = models.TextField(null=True, blank=True, verbose_name=gettext_lazy('description'))
     order = models.PositiveSmallIntegerField(default=0)
     priority = models.ForeignKey(Priority, null=True, on_delete=models.CASCADE)
     phase = models.ForeignKey(Phase, null=True, blank=True, on_delete=models.CASCADE)
